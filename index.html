@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Builder - Документация</title>
+    <style>
+        /* Основные переменные */
+        :root {
+            --primary-color: #ff477e;
+            --secondary-color: #1e1e2e;
+            --text-color: #ffffff;
+            --accent-color: #6cdbeb;
+            --gradient-bg: linear-gradient(135deg, #ff477e, #ffab00);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --shadow-light: rgba(255, 255, 255, 0.3);
+            --shadow-dark: rgba(0, 0, 0, 0.7);
+            --border-radius: 30px;
+            --transition: all 0.4s ease;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle, #1e1e2e, #141416);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Заголовок */
+        header {
+            width: 100%;
+            padding: 30px 0;
+            background: var(--gradient-bg);
+            text-align: center;
+            box-shadow: 0 6px 20px var(--shadow-dark);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Навигация */
+        nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px auto;
+            padding: 15px 25px;
+            width: 90%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px var(--shadow-dark);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 12px;
+            border: 2px solid transparent;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px var(--shadow-light);
+        }
+
+        /* Контент */
+        main {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: var(--glass-bg);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px var(--shadow-dark);
+            backdrop-filter: blur(20px);
+            animation: fadeIn 0.6s ease;
+        }
+
+        main h2 {
+            font-size: 2.4rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        main p, main li {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        main ul, main ol {
+            padding-left: 20px;
+        }
+
+        /* Подвал */
+        footer {
+            width: 100%;
+            padding: 25px 0;
+            text-align: center;
+            background: var(--gradient-bg);
+            color: #fff;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            box-shadow: 0 -10px 20px var(--shadow-dark);
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer a {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: underline;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Web Builder</h1>
+    </header>
+    <nav>
+        <a href="#description">Описание</a>
+        <a href="#features">Функции</a>
+        <a href="#ui">Интерфейс</a>
+        <a href="#steps">Шаги</a>
+        <a href="#contacts">Контакты</a>
+    </nav>
+    <main>
+        <section id="description">
+            <h2>Описание приложения</h2>
+            <p>Web Builder — это удобный инструмент для создания веб-страниц без необходимости программирования.</p>
+        </section>
+        <section id="features">
+            <h2>Основные функции</h2>
+            <ul>
+                <li><b>Создание нового проекта:</b> Нажмите кнопку 'Создать новый проект'.</li>
+                <li><b>Добавление элементов:</b> Панель инструментов позволяет добавлять текст, кнопки, Navbar и Footer.</li>
+                <li><b>Редактирование элементов:</b> Нажмите на элемент для изменения параметров.</li>
+                <li><b>Сохранение и удаление:</b> Сохраняйте или удаляйте элементы.</li>
+            </ul>
+        </section>
+        <section id="ui">
+            <h2>Пользовательский интерфейс</h2>
+            <ul>
+                <li><b>Главный экран:</b> Заголовок, кнопка для нового проекта и сохраненные проекты.</li>
+                <li><b>Рабочая область:</b> Панель инструментов и белая область для работы.</li>
+            </ul>
+        </section>
+        <section id="steps">
+            <h2>Шаги использования</h2>
+            <ol>
+                <li>Начните новый проект.</li>
+                <li>Добавьте элементы с панели инструментов.</li>
+                <li>Редактируйте элементы в диалоговом окне.</li>
+                <li>Сохраняйте проект или удаляйте элементы.</li>
+            </ol>
+        </section>
+        <section id="contacts">
+            <h2>Контакты</h2>
+            <p>Свяжитесь с нами: <a href="mailto:support@webbuilder.com">support@webbuilder.com</a></p>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 Web Builder. Все права защищены.</p>
+    </footer>
+    </main>
+</body>
+</html>
