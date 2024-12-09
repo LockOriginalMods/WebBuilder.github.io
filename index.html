@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Builder - Документация</title>
+    <style>
+        /* Основные переменные */
+        :root {
+            --primary-color: #ff4d6d;
+            --secondary-color: #20232a;
+            --background-color: #0d1117;
+            --text-color: #c9d1d9;
+            --accent-color: #6effe7;
+            --gradient-bg: linear-gradient(145deg, #ff4d6d, #6effe7);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --shadow-light: rgba(255, 255, 255, 0.2);
+            --shadow-dark: rgba(0, 0, 0, 0.6);
+            --border-radius: 20px;
+            --transition: all 0.3s ease-in-out;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--gradient-bg);
+            text-align: center;
+            padding: 30px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 8px 20px var(--shadow-dark);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-color);
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+@keyframes glow {
+    0%, 100% {
+        transform: translateX(-50%) scale(1);
+    }
+    50% {
+        transform: translateX(-50%) scale(1.1);
+    }
+}
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: var(--glass-bg);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px var(--shadow-dark);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        main h2 {
+            font-size: 2.4rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+        }
+
+        section {
+    position: relative;
+    overflow: hidden;
+}
+
+section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 200%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+    opacity: 0.2;
+    transform: translateX(-50%);
+    animation: glow 5s infinite;
+}
+
+        section ul, section ol {
+            padding-left: 20px;
+        }
+
+        section li {
+            margin-bottom: 8px;
+        }
+
+        button {
+            background: var(--primary-color);
+            border: none;
+            padding: 10px 20px;
+            color: var(--text-color);
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow-dark);
+            transition: var(--transition);
+        }
+
+        button:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px) scale(1.03);
+        }
+        section:target {
+    animation: highlight 0.6s ease-out;
+    box-shadow: 0 0 20px var(--accent-color);
+    border: 2px solid var(--accent-color);
+}
+@keyframes highlight {
+    from {
+        transform: scale(0.95);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background: var(--gradient-bg);
+            margin-top: 40px;
+            color: var(--text-color);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.85rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Web Builder</h1>
+    </header>
+
+    <main>
+        <section id="description">
+            <h2>Описание приложения</h2>
+            <p>Web Builder — это удобный инструмент для создания веб-страниц без необходимости программирования.</p>
+        </section>
+        <section id="features">
+            <h2>Основные функции</h2>
+            <ul>
+                <li><b>Создание нового проекта:</b> Нажмите кнопку 'Создать новый проект'.</li>
+                <li><b>Добавление элементов:</b> Панель инструментов позволяет добавлять текст, кнопки, Navbar и Footer.</li>
+                <li><b>Редактирование элементов:</b> Нажмите на элемент для изменения параметров.</li>
+                <li><b>Сохранение и удаление:</b> Сохраняйте или удаляйте элементы.</li>
+            </ul>
+        </section>
+        <section id="ui">
+            <h2>Пользовательский интерфейс</h2>
+            <ul>
+                <li><b>Главный экран:</b> Заголовок, кнопка для нового проекта и сохраненные проекты.</li>
+                <li><b>Рабочая область:</b> Панель инструментов и белая область для работы.</li>
+            </ul>
+        </section>
+        <section id="steps">
+            <h2>Шаги использования</h2>
+            <ol>
+                <li>Начните новый проект.</li>
+                <li>Добавьте элементы с панели инструментов.</li>
+                <li>Редактируйте элементы в диалоговом окне.</li>
+                <li>Сохраняйте проект или удаляйте элементы.</li>
+            </ol>
+        </section>
+        <section id="contacts">
+            <h2>Контакты</h2>
+            <p>Свяжитесь с нами: <a href="mailto:support@webbuilder.com">support@webbuilder.com</a></p>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 Web Builder. Все права защищены.</p>
+    </footer>
+</body>
+</html>
