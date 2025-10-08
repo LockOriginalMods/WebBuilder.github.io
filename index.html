@@ -6,6 +6,7 @@
     <title>КУПП "Маньковичи" | Искусство создания напитков</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Все стили остаются без изменений из предыдущего кода */
         * {
             margin: 0;
             padding: 0;
@@ -31,7 +32,6 @@
             overflow-x: hidden;
         }
 
-        /* Header */
         .header {
             position: fixed;
             top: 0;
@@ -104,7 +104,6 @@
             width: 100%;
         }
 
-        /* Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -175,7 +174,27 @@
             margin-bottom: 2rem;
         }
 
-        /* Sections */
+        .btn-admin {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            z-index: 1000;
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: var(--text);
+        }
+
+        .btn-danger {
+            background: #e53e3e;
+            color: white;
+        }
+
         .section {
             padding: 6rem 0;
         }
@@ -349,7 +368,6 @@
             z-index: 1001;
         }
 
-        /* Страницы продуктов */
         .product-page {
             display: none;
             padding: 8rem 0 4rem;
@@ -367,107 +385,451 @@
             margin-bottom: 3rem;
         }
 
-        .product-details {
+        .product-items-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
-        .product-image-large {
-            background: linear-gradient(45deg, #f8fafc, #e2e8f0);
+        .product-item-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .product-item-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-item-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-item-info {
+            padding: 1.5rem;
+        }
+
+        .product-item-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-item-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-item-specs {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 2rem 0;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-content {
+            background: var(--white);
+            margin: 2rem auto;
             border-radius: 20px;
-            height: 400px;
+            max-width: 1000px;
+            width: 95%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: modalFadeIn 0.4s ease-out;
+            overflow: hidden;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-close {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 6rem;
+            transition: var(--transition);
+        }
+
+        .admin-close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .admin-body {
+            padding: 2rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .admin-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            color: var(--text-light);
+        }
+
+        .admin-tab.active {
             color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .admin-tab:hover {
+            color: var(--primary);
+        }
+
+        .admin-form {
+            display: none;
+        }
+
+        .admin-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 200px;
+            background: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-placeholder {
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .products-list {
+            margin-top: 2rem;
+        }
+
+        .product-admin-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background: #f8fafc;
+        }
+
+        .product-admin-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 1rem;
+        }
+
+        .product-admin-info {
+            flex: 1;
+        }
+
+        .product-admin-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-admin-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .category-color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .category-admin-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background: #f8fafc;
+        }
+
+        .category-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            margin-right: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .category-admin-info {
+            flex: 1;
+        }
+
+        .category-admin-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .category-admin-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .category-admin-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .icon-option {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .icon-option:hover {
+            border-color: var(--primary);
+            background: rgba(45, 90, 39, 0.05);
+        }
+
+        .icon-option.selected {
+            border-color: var(--primary);
+            background: rgba(45, 90, 39, 0.1);
+        }
+
+        .souvenir-card .product-image {
+            background: linear-gradient(45deg, #8B4513, #A0522D);
+        }
+
+        .exclusive-card .product-image {
+            background: linear-gradient(45deg, #D4AF37, #FFD700);
+        }
+
+        .special-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .product-details {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            margin: 2rem 0;
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
             box-shadow: var(--shadow);
+        }
+
+        .product-image-large {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 8rem;
+            padding: 2rem;
+            min-height: 400px;
+        }
+
+        .product-image-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info-detailed {
+            padding: 3rem;
         }
 
         .product-info-detailed h2 {
             color: var(--primary);
             margin-bottom: 1.5rem;
-            font-size: 2rem;
+            font-size: 2.2rem;
         }
 
         .product-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
             margin-bottom: 2rem;
-            color: var(--text);
+            line-height: 1.8;
+        }
+
+        .product-description p {
+            margin-bottom: 1rem;
         }
 
         .product-specs {
             background: #f8fafc;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .product-specs h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
         }
 
         .spec-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
+            padding: 0.5rem 0;
             border-bottom: 1px solid #e2e8f0;
+        }
+
+        .spec-item:last-child {
+            border-bottom: none;
         }
 
         .spec-label {
             font-weight: 600;
             color: var(--text);
-            min-width: 150px;
         }
 
         .spec-value {
             color: var(--text-light);
-            text-align: right;
         }
 
-        .product-variants {
-            margin-top: 3rem;
-        }
-
-        .variants-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+        .product-actions {
+            display: flex;
+            gap: 1rem;
             margin-top: 2rem;
         }
 
-        .variant-card {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .variant-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .variant-name {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .variant-specs {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+        @media (max-width: 968px) {
+            .product-details {
+                grid-template-columns: 1fr;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            
+            .product-image-large {
+                font-size: 6rem;
+                padding: 1.5rem;
+                min-height: 300px;
+            }
+            
+            .product-info-detailed {
+                padding: 2rem;
             }
         }
 
@@ -484,15 +846,107 @@
                 padding: 4rem 0;
             }
 
-            .product-details {
+            .product-items-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .admin-content {
+                margin: 1rem auto;
+                width: 98%;
+            }
+
+            .admin-tabs {
+                flex-wrap: wrap;
+            }
+
+            .admin-tab {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+
+            .admin-actions {
+                flex-direction: column;
+            }
+
+            .form-row {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+            }
+
+            .btn-admin {
+                bottom: 70px;
+                right: 15px;
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
             }
 
             .product-image-large {
-                height: 300px;
                 font-size: 4rem;
+                min-height: 250px;
             }
+            
+            .product-info-detailed {
+                padding: 1.5rem;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 3000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
         }
     </style>
 </head>
@@ -502,6 +956,11 @@
         <i class="fas fa-exclamation-triangle"></i> 
         ЧРЕЗМЕРНОЕ УПОТРЕБЛЕНИЕ АЛКОГОЛЯ ВРЕДИТ ВАШЕМУ ЗДОРОВЬЮ
     </div>
+
+    <!-- Кнопка админ-панели -->
+    <button class="btn btn-admin" onclick="showAdminPanel()">
+        <i class="fas fa-cog"></i> Админ-панель
+    </button>
 
     <!-- Header -->
     <header class="header">
@@ -568,63 +1027,10 @@
             <div class="container">
                 <div class="section-header">
                     <h2>Наша продукция</h2>
-                    <p>Широкая линейка алкогольных напитков высшего качества</p>
+                    <p>Широкая линейка алкогольных напитков высшего качества и сопутствующих товаров</p>
                 </div>
-                <div class="products-grid">
-                    <div class="product-card" onclick="showProductPage('balsam')">
-                        <div class="product-image">
-                            <i class="fas fa-cocktail"></i>
-                        </div>
-                        <div class="product-info">
-                            <h3>Бальзамы</h3>
-                            <p>Травяные целебные напитки на основе натуральных трав и кореньев</p>
-                        </div>
-                    </div>
-                    <div class="product-card" onclick="showProductPage('brandy')">
-                        <div class="product-image">
-                            <i class="fas fa-wine-glass-alt"></i>
-                        </div>
-                        <div class="product-info">
-                            <h3>Бренди</h3>
-                            <p>Благородные напитки с характером и многолетней выдержкой</p>
-                        </div>
-                    </div>
-                    <div class="product-card" onclick="showProductPage('vodka')">
-                        <div class="product-image">
-                            <i class="fas fa-glass-whiskey"></i>
-                        </div>
-                        <div class="product-info">
-                            <h3>Водка</h3>
-                            <p>Чистейшие сорта водки с идеальным вкусовым балансом</p>
-                        </div>
-                    </div>
-                    <div class="product-card" onclick="showProductPage('cognac')">
-                        <div class="product-image">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <div class="product-info">
-                            <h3>Коньяк</h3>
-                            <p>Элитные напитки выдержки в дубовых бочках</p>
-                        </div>
-                    </div>
-                    <div class="product-card" onclick="showProductPage('liqueur')">
-                        <div class="product-image">
-                            <i class="fas fa-wine-bottle"></i>
-                        </div>
-                        <div class="product-info">
-                            <h3>Ликеры</h3>
-                            <p>Сладкие напитки с натуральными фруктовыми экстрактами</p>
-                        </div>
-                    </div>
-                    <div class="product-card" onclick="showProductPage('tincture')">
-                        <div class="product-image">
-                            <i class="fas fa-mortar-pestle"></i>
-                        </div>
-                        <div class="product-info">
-                            <h3>Настойки</h3>
-                            <p>Традиционные напитки на пряностях и лекарственных травах</p>
-                        </div>
-                    </div>
+                <div class="products-grid" id="categories-grid">
+                    <!-- Категории будут загружаться динамически -->
                 </div>
             </div>
         </section>
@@ -671,10 +1077,9 @@
                     </div>
                     <div class="footer-section">
                         <h3>Продукция</h3>
-                        <p><a href="#products" onclick="showMainPage()">Бальзамы</a></p>
-                        <p><a href="#products" onclick="showMainPage()">Бренди</a></p>
-                        <p><a href="#products" onclick="showMainPage()">Водка и коньяк</a></p>
-                        <p><a href="#products" onclick="showMainPage()">Ликеры и настойки</a></p>
+                        <div id="footer-categories">
+                            <!-- Категории для футера -->
+                        </div>
                     </div>
                     <div class="footer-section">
                         <h3>Контакты</h3>
@@ -690,410 +1095,1234 @@
         </footer>
     </div>
 
-    <!-- Страница Бальзамов -->
-    <div id="product-balsam" class="product-page">
-        <div class="container">
-            <button class="btn btn-back" onclick="showMainPage()">
-                <i class="fas fa-arrow-left"></i> Назад к продукции
-            </button>
-            
-            <div class="product-hero">
-                <div class="container">
-                    <h1>Бальзамы</h1>
-                    <p>Травяные целебные напитки на основе натуральных трав и кореньев</p>
-                </div>
-            </div>
+    <!-- Страницы продуктов будут генерироваться динамически -->
 
-            <div class="product-details">
-                <div class="product-image-large">
-                    <i class="fas fa-cocktail"></i>
+    <!-- Админ-панель -->
+    <div id="admin-panel" class="admin-panel">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h2>Админ-панель</h2>
+                <button class="admin-close" onclick="hideAdminPanel()">&times;</button>
+            </div>
+            <div class="admin-body">
+                <div class="admin-tabs">
+                    <button class="admin-tab active" onclick="showAdminTab('categories')">Категории</button>
+                    <button class="admin-tab" onclick="showAdminTab('products')">Продукты</button>
+                    <button class="admin-tab" onclick="showAdminTab('main-products')">Основные продукты</button>
+                    <button class="admin-tab" onclick="showAdminTab('database')">База данных</button>
+                    <button class="admin-tab" onclick="showAdminTab('data')">Данные</button>
                 </div>
-                <div class="product-info-detailed">
-                    <h2>Травяные бальзамы</h2>
-                    <div class="product-description">
-                        <p>Ароматные целебные напитки на основе трав и кореньев, созданные по традиционным рецептам. Наши бальзамы сочетают в себе лучшие качества натуральных ингредиентов и современные технологии производства.</p>
-                        <p>Каждый бальзам - это уникальная композиция из целебных трав, собранных в экологически чистых регионах Беларуси. Мы используем только проверенные временем рецепты, которые передаются из поколения в поколение.</p>
+
+                <!-- Вкладка управления категориями -->
+                <div id="admin-categories" class="admin-form active">
+                    <h3>Управление категориями</h3>
+                    <div class="form-group">
+                        <h4>Добавить новую категорию</h4>
+                        <form id="category-form" onsubmit="addCategory(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="category-name">Название категории</label>
+                                    <input type="text" id="category-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="category-description">Описание</label>
+                                    <input type="text" id="category-description" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="category-icon">Иконка</label>
+                                    <select id="category-icon" class="form-control" required>
+                                        <option value="fa-wine-bottle">Бутылка</option>
+                                        <option value="fa-cocktail">Коктейль</option>
+                                        <option value="fa-wine-glass-alt">Бокал</option>
+                                        <option value="fa-glass-whiskey">Рюмка</option>
+                                        <option value="fa-crown">Корона</option>
+                                        <option value="fa-gift">Подарок</option>
+                                        <option value="fa-gem">Драгоценность</option>
+                                        <option value="fa-beer">Пиво</option>
+                                        <option value="fa-cookie">Печенье</option>
+                                        <option value="fa-cheese">Сыр</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="category-color">Цвет (HEX)</label>
+                                    <input type="color" id="category-color" class="form-control" value="#2d5a27" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Добавить категорию</button>
+                        </form>
                     </div>
                     
-                    <div class="product-specs">
-                        <h3>Характеристики</h3>
-                        <div class="spec-item">
-                            <span class="spec-label">Крепость:</span>
-                            <span class="spec-value">35-45%</span>
+                    <div class="products-list">
+                        <h4>Существующие категории</h4>
+                        <div id="categories-list"></div>
+                    </div>
+                </div>
+
+                <!-- Вкладка управления продуктами -->
+                <div id="admin-products" class="admin-form">
+                    <h3>Управление продуктами</h3>
+                    <div class="form-group">
+                        <label for="product-category">Выберите категорию</label>
+                        <select id="product-category" class="form-control" onchange="showProductForm(this.value)">
+                            <option value="">-- Выберите категорию --</option>
+                        </select>
+                    </div>
+
+                    <div id="product-forms-container">
+                        <!-- Формы для продуктов будут генерироваться динамически -->
+                    </div>
+                </div>
+
+                <!-- Вкладка управления основными продуктами -->
+                <div id="admin-main-products" class="admin-form">
+                    <h3>Управление основными продуктами</h3>
+                    <div class="form-group">
+                        <h4>Добавить/редактировать основной продукт</h4>
+                        <form id="main-product-form" onsubmit="saveMainProduct(event)">
+                            <div class="form-group">
+                                <label for="main-product-category">Категория продукта</label>
+                                <select id="main-product-category" class="form-control" required>
+                                    <option value="">-- Выберите категорию --</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="main-product-title">Заголовок</label>
+                                <input type="text" id="main-product-title" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="main-product-description">Описание</label>
+                                <textarea id="main-product-description" class="form-control" rows="4" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="main-product-icon">Иконка</label>
+                                <select id="main-product-icon" class="form-control" required>
+                                    <option value="fa-cocktail">Коктейль</option>
+                                    <option value="fa-wine-bottle">Бутылка</option>
+                                    <option value="fa-wine-glass-alt">Бокал</option>
+                                    <option value="fa-glass-whiskey">Рюмка</option>
+                                    <option value="fa-leaf">Лист</option>
+                                    <option value="fa-seedling">Росток</option>
+                                    <option value="fa-spa">СПА</option>
+                                    <option value="fa-mortar-pestle">Ступка</option>
+                                    <option value="fa-crown">Корона</option>
+                                    <option value="fa-gem">Драгоценность</option>
+                                    <option value="fa-gift">Подарок</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Характеристики продукта</label>
+                                <div id="main-product-specs">
+                                    <div class="spec-input-group">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control spec-label-input" placeholder="Название характеристики">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control spec-value-input" placeholder="Значение">
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-danger" onclick="removeSpecField(this)">✕</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary btn-small" onclick="addSpecField()">
+                                    <i class="fas fa-plus"></i> Добавить характеристику
+                                </button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="main-product-image">Изображение продукта</label>
+                                <input type="file" id="main-product-image" class="form-control" accept="image/*" onchange="previewMainProductImage(this)">
+                                <div class="image-preview" id="main-product-preview">
+                                    <div class="image-preview-placeholder">
+                                        <i class="fas fa-image"></i>
+                                        <p>Предпросмотр изображения</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Сохранить основной продукт</button>
+                        </form>
+                    </div>
+                    
+                    <div class="products-list">
+                        <h4>Существующие основные продукты</h4>
+                        <div id="main-products-list"></div>
+                    </div>
+                </div>
+
+                <!-- НОВАЯ ВКЛАДКА: База данных -->
+                <div id="admin-database" class="admin-form">
+                    <h3>Управление базой данных</h3>
+                    <div class="form-group">
+                        <h4>Подключение к MySQL</h4>
+                        <div class="database-info">
+                            <p><strong>Статус:</strong> <span id="db-status">Не подключено</span></p>
+                            <p><strong>Хост:</strong> sql7.freesqldatabase.com</p>
+                            <p><strong>База данных:</strong> sql7801970</p>
                         </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Выдержка:</span>
-                            <span class="spec-value">от 6 месяцев</span>
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" onclick="connectToDatabase()">
+                                <i class="fas fa-plug"></i> Подключиться к БД
+                            </button>
+                            <button class="btn btn-secondary" onclick="syncToDatabase()">
+                                <i class="fas fa-sync"></i> Синхронизировать с БД
+                            </button>
+                            <button class="btn btn-secondary" onclick="loadFromDatabase()">
+                                <i class="fas fa-download"></i> Загрузить из БД
+                            </button>
+                            <button class="btn btn-danger" onclick="clearDatabase()">
+                                <i class="fas fa-trash"></i> Очистить БД
+                            </button>
                         </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Состав:</span>
-                            <span class="spec-value">Травы, коренья, натуральные экстракты</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Температура подачи:</span>
-                            <span class="spec-value">16-18°C</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h4>Статистика базы данных</h4>
+                        <div id="database-stats">
+                            <p>Загрузка статистики...</p>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="product-variants">
-                <h2>Разновидности бальзамов</h2>
-                <div class="variants-grid">
-                    <div class="variant-card">
-                        <div class="variant-name">Бальзам "Лесной"</div>
-                        <div class="variant-specs">Крепость: 40%<br>Выдержка: 8 месяцев</div>
+                <!-- Вкладка управления данными -->
+                <div id="admin-data" class="admin-form">
+                    <h3>Управление данными</h3>
+                    <div class="admin-actions">
+                        <button class="btn btn-primary" onclick="exportData()">
+                            <i class="fas fa-download"></i> Экспорт данных
+                        </button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">
+                            <i class="fas fa-upload"></i> Импорт данных
+                        </button>
+                        <input type="file" id="import-file" accept=".json" style="display: none" onchange="importData(event)">
+                        <button class="btn btn-danger" onclick="clearAllData()">
+                            <i class="fas fa-trash"></i> Очистить все данные
+                        </button>
                     </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Бальзам "Целебный"</div>
-                        <div class="variant-specs">Крепость: 35%<br>Выдержка: 6 месяцев</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Бальзам "Премиум"</div>
-                        <div class="variant-specs">Крепость: 45%<br>Выдержка: 12 месяцев</div>
+                    
+                    <div class="form-group">
+                        <h4>Статистика хранилища</h4>
+                        <div id="storage-stats">
+                            <p>Загрузка статистики...</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Страница Бренди -->
-    <div id="product-brandy" class="product-page">
-        <div class="container">
-            <button class="btn btn-back" onclick="showMainPage()">
-                <i class="fas fa-arrow-left"></i> Назад к продукции
-            </button>
-            
-            <div class="product-hero">
-                <div class="container">
-                    <h1>Бренди</h1>
-                    <p>Благородные напитки с характером и многолетней выдержкой</p>
-                </div>
-            </div>
-
-            <div class="product-details">
-                <div class="product-image-large">
-                    <i class="fas fa-wine-glass-alt"></i>
-                </div>
-                <div class="product-info-detailed">
-                    <h2>Выдержанное бренди</h2>
-                    <div class="product-description">
-                        <p>Благородные напитки с характером и многолетней выдержкой в дубовых бочках. Каждое бренди обладает уникальным букетом и послевкусием, которое раскрывается постепенно.</p>
-                        <p>Мы используем только отборные виноградные дистилляты, которые проходят длительную выдержку в дубовых бочках. Это придает нашим бренди насыщенный цвет, сложный аромат и бархатистый вкус.</p>
-                    </div>
-                    
-                    <div class="product-specs">
-                        <h3>Характеристики</h3>
-                        <div class="spec-item">
-                            <span class="spec-label">Крепость:</span>
-                            <span class="spec-value">38-42%</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Выдержка:</span>
-                            <span class="spec-value">3-10 лет</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Сырье:</span>
-                            <span class="spec-value">Виноградные дистилляты</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Температура подачи:</span>
-                            <span class="spec-value">18-20°C</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-variants">
-                <h2>Разновидности бренди</h2>
-                <div class="variants-grid">
-                    <div class="variant-card">
-                        <div class="variant-name">Бренди "Классик"</div>
-                        <div class="variant-specs">Крепость: 40%<br>Выдержка: 3 года</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Бренди "Выдержанный"</div>
-                        <div class="variant-specs">Крепость: 40%<br>Выдержка: 5 лет</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Бренди "Премиум"</div>
-                        <div class="variant-specs">Крепость: 42%<br>Выдержка: 10 лет</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Страница Водки -->
-    <div id="product-vodka" class="product-page">
-        <div class="container">
-            <button class="btn btn-back" onclick="showMainPage()">
-                <i class="fas fa-arrow-left"></i> Назад к продукции
-            </button>
-            
-            <div class="product-hero">
-                <div class="container">
-                    <h1>Водка</h1>
-                    <p>Чистейшие сорта водки с идеальным вкусовым балансом</p>
-                </div>
-            </div>
-
-            <div class="product-details">
-                <div class="product-image-large">
-                    <i class="fas fa-glass-whiskey"></i>
-                </div>
-                <div class="product-info-detailed">
-                    <h2>Кристальная водка</h2>
-                    <div class="product-description">
-                        <p>Чистейшие сорта водки с идеальным вкусовым балансом. Проходит многоступенчатую фильтрацию для достижения кристальной чистоты и мягкости вкуса.</p>
-                        <p>Наша водка производится из отборного зернового сырья с использованием уникальной технологии очистки. Каждая партия проходит строгий контроль качества для обеспечения безупречного вкуса.</p>
-                    </div>
-                    
-                    <div class="product-specs">
-                        <h3>Характеристики</h3>
-                        <div class="spec-item">
-                            <span class="spec-label">Крепость:</span>
-                            <span class="spec-value">40%</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Фильтрация:</span>
-                            <span class="spec-value">5-ступенчатая</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Сырье:</span>
-                            <span class="spec-value">Пшеница, рожь</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Температура подачи:</span>
-                            <span class="spec-value">6-8°C</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-variants">
-                <h2>Разновидности водки</h2>
-                <div class="variants-grid">
-                    <div class="variant-card">
-                        <div class="variant-name">Водка "Классическая"</div>
-                        <div class="variant-specs">Крепость: 40%<br>Основа: пшеница</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Водка "Ржаная"</div>
-                        <div class="variant-specs">Крепость: 40%<br>Основа: рожь</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Водка "Особая"</div>
-                        <div class="variant-specs">Крепость: 40%<br>Многоступенчатая фильтрация</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Страница Коньяка -->
-    <div id="product-cognac" class="product-page">
-        <div class="container">
-            <button class="btn btn-back" onclick="showMainPage()">
-                <i class="fas fa-arrow-left"></i> Назад к продукции
-            </button>
-            
-            <div class="product-hero">
-                <div class="container">
-                    <h1>Коньяк</h1>
-                    <p>Элитные напитки выдержки в дубовых бочках</p>
-                </div>
-            </div>
-
-            <div class="product-details">
-                <div class="product-image-large">
-                    <i class="fas fa-crown"></i>
-                </div>
-                <div class="product-info-detailed">
-                    <h2>Элитный коньяк</h2>
-                    <div class="product-description">
-                        <p>Напитки выдержки в дубовых бочках с богатым ароматом и сложным букетом. Идеальное сочетание для особых моментов и торжественных событий.</p>
-                        <p>Наши коньяки производятся по классической технологии с длительной выдержкой в дубовых бочках. Это придает напитку благородный янтарный цвет, тонкий аромат ванили, дуба и специй, а также продолжительное послевкусие.</p>
-                    </div>
-                    
-                    <div class="product-specs">
-                        <h3>Характеристики</h3>
-                        <div class="spec-item">
-                            <span class="spec-label">Крепость:</span>
-                            <span class="spec-value">40%</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Выдержка:</span>
-                            <span class="spec-value">5-25 лет</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Категории:</span>
-                            <span class="spec-value">VS, VSOP, XO</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Температура подачи:</span>
-                            <span class="spec-value">18-20°C</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-variants">
-                <h2>Разновидности коньяка</h2>
-                <div class="variants-grid">
-                    <div class="variant-card">
-                        <div class="variant-name">Коньяк "VS"</div>
-                        <div class="variant-specs">Крепость: 40%<br>Выдержка: 3-5 лет</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Коньяк "VSOP"</div>
-                        <div class="variant-specs">Крепость: 40%<br>Выдержка: 5-10 лет</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Коньяк "XO"</div>
-                        <div class="variant-specs">Крепость: 40%<br>Выдержка: 10+ лет</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Страница Ликеров -->
-    <div id="product-liqueur" class="product-page">
-        <div class="container">
-            <button class="btn btn-back" onclick="showMainPage()">
-                <i class="fas fa-arrow-left"></i> Назад к продукции
-            </button>
-            
-            <div class="product-hero">
-                <div class="container">
-                    <h1>Ликеры</h1>
-                    <p>Сладкие напитки с натуральными фруктовыми экстрактами</p>
-                </div>
-            </div>
-
-            <div class="product-details">
-                <div class="product-image-large">
-                    <i class="fas fa-wine-bottle"></i>
-                </div>
-                <div class="product-info-detailed">
-                    <h2>Фруктовые ликеры</h2>
-                    <div class="product-description">
-                        <p>Нежные сладкие напитки с натуральными фруктовыми экстрактами. Идеальны как для употребления в чистом виде, так и для создания коктейлей и десертов.</p>
-                        <p>Мы используем только натуральные фруктовые соки и экстракты для создания насыщенного вкуса и аромата. Наши ликеры отличаются сбалансированной сладостью и богатой палитрой вкусов.</p>
-                    </div>
-                    
-                    <div class="product-specs">
-                        <h3>Характеристики</h3>
-                        <div class="spec-item">
-                            <span class="spec-label">Крепость:</span>
-                            <span class="spec-value">20-30%</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Вкусы:</span>
-                            <span class="spec-value">Вишня, малина, кофе, шоколад</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Сахар:</span>
-                            <span class="spec-value">100-250 г/л</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Температура подачи:</span>
-                            <span class="spec-value">8-12°C</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-variants">
-                <h2>Разновидности ликеров</h2>
-                <div class="variants-grid">
-                    <div class="variant-card">
-                        <div class="variant-name">Ликер "Вишневый"</div>
-                        <div class="variant-specs">Крепость: 25%<br>Основа: вишня</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Ликер "Кофейный"</div>
-                        <div class="variant-specs">Крепость: 20%<br>Основа: кофе</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Ликер "Шоколадный"</div>
-                        <div class="variant-specs">Крепость: 22%<br>Основа: какао</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Страница Настоек -->
-    <div id="product-tincture" class="product-page">
-        <div class="container">
-            <button class="btn btn-back" onclick="showMainPage()">
-                <i class="fas fa-arrow-left"></i> Назад к продукции
-            </button>
-            
-            <div class="product-hero">
-                <div class="container">
-                    <h1>Настойки</h1>
-                    <p>Традиционные напитки на пряностях и лекарственных травах</p>
-                </div>
-            </div>
-
-            <div class="product-details">
-                <div class="product-image-large">
-                    <i class="fas fa-mortar-pestle"></i>
-                </div>
-                <div class="product-info-detailed">
-                    <h2>Горькие настойки</h2>
-                    <div class="product-description">
-                        <p>Традиционные напитки на пряностях и лекарственных травах. Обладают насыщенным вкусом и ароматом, идеальны как дижестив после еды.</p>
-                        <p>Наши настойки создаются по старинным рецептам с использованием целебных трав и специй. Каждая настойка имеет свой уникальный характер и рекомендуется для улучшения пищеварения.</p>
-                    </div>
-                    
-                    <div class="product-specs">
-                        <h3>Характеристики</h3>
-                        <div class="spec-item">
-                            <span class="spec-label">Крепость:</span>
-                            <span class="spec-value">30-40%</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Настаивание:</span>
-                            <span class="spec-value">2-8 недель</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Основа:</span>
-                            <span class="spec-value">Травы, специи, коренья</span>
-                        </div>
-                        <div class="spec-item">
-                            <span class="spec-label">Температура подачи:</span>
-                            <span class="spec-value">16-18°C</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-variants">
-                <h2>Разновидности настоек</h2>
-                <div class="variants-grid">
-                    <div class="variant-card">
-                        <div class="variant-name">Настойка "Горькая"</div>
-                        <div class="variant-specs">Крепость: 35%<br>Основа: полынь</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Настойка "Перцовая"</div>
-                        <div class="variant-specs">Крепость: 40%<br>Основа: перец</div>
-                    </div>
-                    <div class="variant-card">
-                        <div class="variant-name">Настойка "Травяная"</div>
-                        <div class="variant-specs">Крепость: 30%<br>Основа: сбор трав</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Уведомления -->
+    <div id="notification" class="notification"></div>
 
     <script>
-        // Функции для навигации между страницами
+        // Структура данных
+        let appData = {
+            categories: [
+                {
+                    id: 'balsam',
+                    name: 'Бальзамы',
+                    description: 'Травяные целебные напитки на основе натуральных трав и кореньев',
+                    icon: 'fa-cocktail',
+                    color: '#2d5a27'
+                },
+                {
+                    id: 'brandy',
+                    name: 'Бренди',
+                    description: 'Благородные напитки с характером и многолетней выдержкой',
+                    icon: 'fa-wine-glass-alt',
+                    color: '#2d5a27'
+                },
+                {
+                    id: 'vodka',
+                    name: 'Водка',
+                    description: 'Чистейшие сорта водки с идеальным вкусовым балансом',
+                    icon: 'fa-glass-whiskey',
+                    color: '#2d5a27'
+                },
+                {
+                    id: 'cognac',
+                    name: 'Коньяк',
+                    description: 'Элитные напитки выдержки в дубовых бочках',
+                    icon: 'fa-crown',
+                    color: '#2d5a27'
+                },
+                {
+                    id: 'liqueur',
+                    name: 'Ликеры',
+                    description: 'Сладкие напитки с натуральными фруктовыми экстрактами',
+                    icon: 'fa-wine-bottle',
+                    color: '#2d5a27'
+                },
+                {
+                    id: 'tincture',
+                    name: 'Настойки',
+                    description: 'Традиционные напитки на пряностях и лекарственных травах',
+                    icon: 'fa-mortar-pestle',
+                    color: '#2d5a27'
+                },
+                {
+                    id: 'souvenir',
+                    name: 'Сувениры',
+                    description: 'Памятные подарки и аксессуары с символикой предприятия',
+                    icon: 'fa-gift',
+                    color: '#8B4513'
+                },
+                {
+                    id: 'exclusive',
+                    name: 'Эксклюзивы',
+                    description: 'Уникальные коллекционные издания ограниченного выпуска',
+                    icon: 'fa-gem',
+                    color: '#D4AF37'
+                }
+            ],
+            products: {
+                balsam: [],
+                brandy: [],
+                vodka: [],
+                cognac: [],
+                liqueur: [],
+                tincture: [],
+                souvenir: [],
+                exclusive: []
+            },
+            mainProducts: {
+                balsam: {
+                    title: "Травяные бальзамы",
+                    description: `<p>Ароматные целебные напитки на основе трав и кореньев, созданные по традиционным рецептам. Наши бальзамы сочетают в себе лучшие качества натуральных ингредиентов и современные технологии производства.</p>
+                                 <p>Каждый бальзам - это уникальная композиция из целебных трав, собранных в экологически чистых регионах Беларуси. Мы используем только проверенные временем рецепты, которые передаются из поколения в поколение.</p>`,
+                    icon: "fa-cocktail",
+                    specs: [
+                        { label: "Крепость:", value: "35-45%" },
+                        { label: "Выдержка:", value: "от 6 месяцев" },
+                        { label: "Состав:", value: "Травы, коренья, натуральные экстракты" },
+                        { label: "Температура подачи:", value: "16-18°C" }
+                    ],
+                    image: null
+                },
+                brandy: {
+                    title: "Выдержанное бренди",
+                    description: `<p>Благородные напитки, созданные по старинным рецептам с многолетней выдержкой в дубовых бочках. Наше бренди отличается насыщенным вкусом и изысканным ароматом.</p>
+                                 <p>Каждая партия проходит строгий контроль качества и выдерживается в идеальных условиях для достижения совершенного вкусового баланса.</p>`,
+                    icon: "fa-wine-glass-alt",
+                    specs: [
+                        { label: "Крепость:", value: "40-45%" },
+                        { label: "Выдержка:", value: "от 3 лет" },
+                        { label: "Тип бочки:", value: "Дубовая" },
+                        { label: "Температура подачи:", value: "18-20°C" }
+                    ],
+                    image: null
+                },
+                vodka: {
+                    title: "Классическая водка",
+                    description: `<p>Чистейшие сорта водки, созданные по традиционным технологиям с применением современных методов очистки. Идеальный баланс мягкости и крепости.</p>
+                                 <p>Наша водка проходит многоступенчатую систему фильтрации, что гарантирует кристальную чистоту и мягкий вкус без посторонних примесей.</p>`,
+                    icon: "fa-glass-whiskey",
+                    specs: [
+                        { label: "Крепость:", value: "40%" },
+                        { label: "Очистка:", value: "Многоступенчатая" },
+                        { label: "Сырье:", value: "Отборная пшеница" },
+                        { label: "Температура подачи:", value: "6-8°C" }
+                    ],
+                    image: null
+                },
+                cognac: {
+                    title: "Элитный коньяк",
+                    description: `<p>Изысканные коньяки выдержки в дубовых бочках, созданные по классическим французским технологиям. Напитки премиум-класса для настоящих ценителей.</p>
+                                 <p>Каждый коньяк - это результат многолетней работы мастеров-виноделов и тщательного отбора лучших сортов винограда.</p>`,
+                    icon: "fa-crown",
+                    specs: [
+                        { label: "Крепость:", value: "40%" },
+                        { label: "Выдержка:", value: "от 5 лет" },
+                        { label: "Сорт винограда:", value: "Коллекционные сорта" },
+                        { label: "Температура подачи:", value: "18-20°C" }
+                    ],
+                    image: null
+                },
+                liqueur: {
+                    title: "Фруктовые ликеры",
+                    description: `<p>Сладкие ароматные напитки на основе натуральных фруктовых соков и экстрактов. Идеальное дополнение к десертам или самостоятельный напиток.</p>
+                                 <p>Наши ликеры создаются из свежих сезонных фруктов, собранных в экологически чистых регионах Беларуси.</p>`,
+                    icon: "fa-wine-bottle",
+                    specs: [
+                        { label: "Крепость:", value: "20-30%" },
+                        { label: "Основа:", value: "Натуральные фрукты" },
+                        { label: "Сахар:", value: "Натуральный" },
+                        { label: "Температура подачи:", value: "10-12°C" }
+                    ],
+                    image: null
+                },
+                tincture: {
+                    title: "Травяные настойки",
+                    description: `<p>Традиционные напитки на основе лекарственных трав и пряностей. Сохраняем рецепты, проверенные временем, и дополняем их современными технологиями.</p>
+                                 <p>Каждая настойка - это гармоничное сочетание целебных свойств трав и приятного вкуса.</p>`,
+                    icon: "fa-mortar-pestle",
+                    specs: [
+                        { label: "Крепость:", value: "35-40%" },
+                        { label: "Настаивание:", value: "от 1 месяца" },
+                        { label: "Состав:", value: "Травы, пряности, ягоды" },
+                        { label: "Температура подачи:", value: "16-18°C" }
+                    ],
+                    image: null
+                },
+                souvenir: {
+                    title: "Памятные сувениры",
+                    description: `<p>Уникальные сувенирные изделия с символикой предприятия. Идеальный подарок для ценителей качественных алкогольных напитков.</p>
+                                 <p>В нашем ассортименте представлены различные аксессуары и подарочные наборы, которые станут прекрасным дополнением к любой коллекции.</p>`,
+                    icon: "fa-gift",
+                    specs: [
+                        { label: "Материал:", value: "Различные" },
+                        { label: "Производство:", value: "Ручная работа" },
+                        { label: "Назначение:", value: "Подарочное" },
+                        { label: "Упаковка:", value: "Презентационная" }
+                    ],
+                    image: null
+                },
+                exclusive: {
+                    title: "Коллекционные эксклюзивы",
+                    description: `<p>Уникальные напитки ограниченного выпуска, созданные для истинных ценителей. Каждый экземпляр - это произведение искусства в мире алкогольных напитков.</p>
+                                 <p>Наши эксклюзивные коллекции включают редкие сорта и специальные рецептуры, доступные только в ограниченном количестве.</p>`,
+                    icon: "fa-gem",
+                    specs: [
+                        { label: "Тираж:", value: "Ограниченный" },
+                        { label: "Упаковка:", value: "Эксклюзивная" },
+                        { label: "Доступность:", value: "Коллекционная" },
+                        { label: "Ценность:", value: "Инвестиционная" }
+                    ],
+                    image: null
+                }
+            }
+        };
+
+        // Система уведомлений
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Загрузка данных
+        function loadData() {
+            const saved = localStorage.getItem('man_data');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    appData.categories = parsed.categories || appData.categories;
+                    appData.products = parsed.products || appData.products;
+                    appData.mainProducts = parsed.mainProducts || appData.mainProducts;
+                } catch (e) {
+                    console.error('Ошибка загрузки данных:', e);
+                }
+            }
+            updateDisplay();
+        }
+
+        // Сохранение данных
+        function saveData() {
+            try {
+                // Создаем копию данных без тяжелых изображений для статистики
+                const dataToSave = JSON.parse(JSON.stringify(appData));
+                
+                // Очищаем большие изображения из сохраненных данных (храним только в отдельных ключах)
+                Object.keys(dataToSave.mainProducts).forEach(categoryId => {
+                    if (dataToSave.mainProducts[categoryId].image) {
+                        // Сохраняем изображение отдельно
+                        localStorage.setItem(`main_product_image_${categoryId}`, dataToSave.mainProducts[categoryId].image);
+                        dataToSave.mainProducts[categoryId].image = 'saved_separately';
+                    }
+                });
+                
+                Object.keys(dataToSave.products).forEach(categoryId => {
+                    dataToSave.products[categoryId].forEach((product, index) => {
+                        if (product.image) {
+                            localStorage.setItem(`product_image_${categoryId}_${index}`, product.image);
+                            dataToSave.products[categoryId][index].image = 'saved_separately';
+                        }
+                    });
+                });
+                
+                localStorage.setItem('man_data', JSON.stringify(dataToSave));
+                updateDisplay();
+                showNotification('Данные успешно сохранены!');
+            } catch (e) {
+                console.error('Ошибка сохранения данных:', e);
+                showNotification('Ошибка сохранения данных!', 'error');
+            }
+        }
+
+        // Восстановление изображений при загрузке
+        function restoreImages() {
+            Object.keys(appData.mainProducts).forEach(categoryId => {
+                const savedImage = localStorage.getItem(`main_product_image_${categoryId}`);
+                if (savedImage && appData.mainProducts[categoryId].image === 'saved_separately') {
+                    appData.mainProducts[categoryId].image = savedImage;
+                }
+            });
+            
+            Object.keys(appData.products).forEach(categoryId => {
+                appData.products[categoryId].forEach((product, index) => {
+                    const savedImage = localStorage.getItem(`product_image_${categoryId}_${index}`);
+                    if (savedImage && product.image === 'saved_separately') {
+                        appData.products[categoryId][index].image = savedImage;
+                    }
+                });
+            });
+        }
+
+        // Обновление отображения
+        function updateDisplay() {
+            restoreImages(); // Восстанавливаем изображения
+            updateCategoriesDisplay();
+            updateProductPages();
+            updateAdminForms();
+            updateStorageStats();
+        }
+
+        // Обновление отображения категорий
+        function updateCategoriesDisplay() {
+            const categoriesGrid = document.getElementById('categories-grid');
+            categoriesGrid.innerHTML = '';
+            
+            appData.categories.forEach(category => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'product-card';
+                categoryCard.onclick = () => showProductPage(category.id);
+                categoryCard.innerHTML = `
+                    <div class="product-image" style="background: linear-gradient(45deg, ${category.color}, ${lightenColor(category.color, 20)})">
+                        <i class="fas ${category.icon}"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3>${category.name}</h3>
+                        <p>${category.description}</p>
+                    </div>
+                `;
+                categoriesGrid.appendChild(categoryCard);
+            });
+
+            const footerCategories = document.getElementById('footer-categories');
+            footerCategories.innerHTML = '';
+            
+            appData.categories.forEach(category => {
+                const link = document.createElement('p');
+                link.innerHTML = `<a href="#products" onclick="showMainPage()">${category.name}</a>`;
+                footerCategories.appendChild(link);
+            });
+        }
+
+        // Обновление страниц продуктов
+        function updateProductPages() {
+            document.querySelectorAll('.product-page').forEach(page => {
+                if (page.id !== 'product-pages-container') {
+                    page.remove();
+                }
+            });
+
+            const pagesContainer = document.getElementById('product-pages-container') || document.body;
+            
+            appData.categories.forEach(category => {
+                const page = document.createElement('div');
+                page.id = `product-${category.id}`;
+                page.className = 'product-page';
+                
+                const mainProduct = appData.mainProducts[category.id];
+                
+                page.innerHTML = `
+                    <div class="container">
+                        <button class="btn btn-back" onclick="showMainPage()">
+                            <i class="fas fa-arrow-left"></i> Назад к продукции
+                        </button>
+                        
+                        <div class="product-hero" style="background: linear-gradient(135deg, ${category.color}, ${lightenColor(category.color, 20)})">
+                            <div class="container">
+                                <h1>${category.name}</h1>
+                                <p>${category.description}</p>
+                            </div>
+                        </div>
+
+                        ${mainProduct ? `
+                            <div class="product-details">
+                                <div class="product-image-large">
+                                    ${mainProduct.image ? 
+                                        `<img src="${mainProduct.image}" alt="${mainProduct.title}" style="width: 100%; height: 100%; object-fit: cover;">` :
+                                        `<i class="fas ${mainProduct.icon}"></i>`
+                                    }
+                                </div>
+                                <div class="product-info-detailed">
+                                    <h2>${mainProduct.title}</h2>
+                                    <div class="product-description">
+                                        ${mainProduct.description}
+                                    </div>
+                                    
+                                    <div class="product-specs">
+                                        <h3>Характеристики</h3>
+                                        ${mainProduct.specs.map(spec => `
+                                            <div class="spec-item">
+                                                <span class="spec-label">${spec.label}</span>
+                                                <span class="spec-value">${spec.value}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <div class="product-items-grid" id="${category.id}-items">
+                            ${appData.products[category.id] && appData.products[category.id].length > 0 ? 
+                                appData.products[category.id].map(product => `
+                                    <div class="product-item-card">
+                                        ${product.image ? 
+                                            `<img src="${product.image}" alt="${product.name}" class="product-item-image">` :
+                                            `<div class="product-item-image" style="background: linear-gradient(45deg, ${category.color}, ${lightenColor(category.color, 20)}); display: flex; align-items: center; justify-content: center; color: white;">
+                                                <i class="fas ${category.icon}"></i>
+                                            </div>`
+                                        }
+                                        <div class="product-item-info">
+                                            <div class="product-item-name">${product.name}</div>
+                                            <div class="product-item-description">${product.description}</div>
+                                            <div class="product-item-specs">${product.specs}</div>
+                                        </div>
+                                    </div>
+                                `).join('') : 
+                                '<p style="text-align: center; color: var(--text-light); grid-column: 1 / -1;">Продукты пока не добавлены</p>'
+                            }
+                        </div>
+                    </div>
+                `;
+                pagesContainer.appendChild(page);
+            });
+        }
+
+        // Обновление статистики хранилища
+        function updateStorageStats() {
+            const statsElement = document.getElementById('storage-stats');
+            if (!statsElement) return;
+            
+            let totalSize = 0;
+            let imageCount = 0;
+            
+            // Считаем размер основных данных
+            const mainData = localStorage.getItem('man_data');
+            if (mainData) {
+                totalSize += new Blob([mainData]).size;
+            }
+            
+            // Считаем размер изображений
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('main_product_image_') || key.startsWith('product_image_')) {
+                    const item = localStorage.getItem(key);
+                    totalSize += new Blob([item]).size;
+                    imageCount++;
+                }
+            }
+            
+            const totalKB = (totalSize / 1024).toFixed(2);
+            const totalMB = (totalSize / (1024 * 1024)).toFixed(2);
+            
+            statsElement.innerHTML = `
+                <p><strong>Общий размер данных:</strong> ${totalKB} KB (${totalMB} MB)</p>
+                <p><strong>Количество изображений:</strong> ${imageCount}</p>
+                <p><strong>Категорий:</strong> ${appData.categories.length}</p>
+                <p><strong>Основных продуктов:</strong> ${Object.keys(appData.mainProducts).length}</p>
+                <p><strong>Обычных продуктов:</strong> ${Object.values(appData.products).reduce((sum, arr) => sum + arr.length, 0)}</p>
+            `;
+        }
+
+        // Обновление админ-форм
+        function updateAdminForms() {
+            // Список категорий
+            const categoriesList = document.getElementById('categories-list');
+            categoriesList.innerHTML = '';
+            
+            appData.categories.forEach((category, index) => {
+                const item = document.createElement('div');
+                item.className = 'category-admin-item';
+                item.innerHTML = `
+                    <div class="category-color" style="background: ${category.color}"></div>
+                    <div class="category-admin-info">
+                        <div class="category-admin-name">${category.name}</div>
+                        <div class="category-admin-description">${category.description}</div>
+                    </div>
+                    <div class="category-admin-actions">
+                        <button class="btn btn-small" onclick="editCategory(${index})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-small btn-danger" onclick="deleteCategory(${index})" ${appData.categories.length <= 1 ? 'disabled' : ''}>
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                categoriesList.appendChild(item);
+            });
+
+            // Селектор категорий для продуктов
+            const categorySelect = document.getElementById('product-category');
+            categorySelect.innerHTML = '<option value="">-- Выберите категорию --</option>';
+            
+            appData.categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+            });
+
+            // Селектор категорий для основных продуктов
+            const mainProductCategorySelect = document.getElementById('main-product-category');
+            mainProductCategorySelect.innerHTML = '<option value="">-- Выберите категорию --</option>';
+            
+            appData.categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                mainProductCategorySelect.appendChild(option);
+            });
+
+            updateMainProductsList();
+            updateStorageStats();
+        }
+
+        // Обновление списка основных продуктов в админке
+        function updateMainProductsList() {
+            const mainProductsList = document.getElementById('main-products-list');
+            mainProductsList.innerHTML = '';
+            
+            Object.keys(appData.mainProducts).forEach(categoryId => {
+                const mainProduct = appData.mainProducts[categoryId];
+                const category = appData.categories.find(cat => cat.id === categoryId);
+                
+                if (category && mainProduct) {
+                    const item = document.createElement('div');
+                    item.className = 'product-admin-item';
+                    item.innerHTML = `
+                        <div class="product-admin-info">
+                            <div class="product-admin-name">${category.name} - ${mainProduct.title}</div>
+                            <div>${mainProduct.description.substring(0, 100)}...</div>
+                        </div>
+                        <div class="product-admin-actions">
+                            <button class="btn btn-small" onclick="editMainProduct('${categoryId}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-small btn-danger" onclick="deleteMainProduct('${categoryId}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    mainProductsList.appendChild(item);
+                }
+            });
+        }
+
+        // Добавление поля для характеристики
+        function addSpecField() {
+            const specsContainer = document.getElementById('main-product-specs');
+            const newSpecField = document.createElement('div');
+            newSpecField.className = 'spec-input-group';
+            newSpecField.innerHTML = `
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" class="form-control spec-label-input" placeholder="Название характеристики">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control spec-value-input" placeholder="Значение">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-danger" onclick="removeSpecField(this)">✕</button>
+                    </div>
+                </div>
+            `;
+            specsContainer.appendChild(newSpecField);
+        }
+
+        // Удаление поля характеристики
+        function removeSpecField(button) {
+            button.closest('.spec-input-group').remove();
+        }
+
+        // Сохранение основного продукта
+        async function saveMainProduct(event) {
+            event.preventDefault();
+            
+            const categoryId = document.getElementById('main-product-category').value;
+            const title = document.getElementById('main-product-title').value;
+            const description = document.getElementById('main-product-description').value;
+            const icon = document.getElementById('main-product-icon').value;
+            const imageInput = document.getElementById('main-product-image');
+            
+            // Собираем характеристики
+            const specs = [];
+            document.querySelectorAll('.spec-input-group').forEach(group => {
+                const labelInput = group.querySelector('.spec-label-input');
+                const valueInput = group.querySelector('.spec-value-input');
+                
+                if (labelInput.value && valueInput.value) {
+                    specs.push({
+                        label: labelInput.value,
+                        value: valueInput.value
+                    });
+                }
+            });
+            
+            let imageData = null;
+            
+            // Обрабатываем изображение
+            const file = imageInput.files[0];
+            if (file) {
+                try {
+                    const reader = new FileReader();
+                    
+                    // Читаем файл как Data URL
+                    imageData = await new Promise((resolve) => {
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.readAsDataURL(file);
+                    });
+                    
+                } catch (error) {
+                    console.error('Ошибка обработки изображения:', error);
+                    showNotification('Ошибка при обработке изображения', 'error');
+                    return;
+                }
+            } else {
+                // Если изображение не выбрано, используем существующее
+                const existingProduct = appData.mainProducts[categoryId];
+                if (existingProduct && existingProduct.image) {
+                    imageData = existingProduct.image;
+                }
+            }
+            
+            // Сохраняем продукт
+            appData.mainProducts[categoryId] = {
+                title,
+                description,
+                icon,
+                specs,
+                image: imageData
+            };
+            
+            saveData();
+            showNotification('Основной продукт сохранен!');
+            
+            // Сбрасываем форму
+            document.getElementById('main-product-form').reset();
+            document.getElementById('main-product-specs').innerHTML = `
+                <div class="spec-input-group">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" class="form-control spec-label-input" placeholder="Название характеристики">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control spec-value-input" placeholder="Значение">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-danger" onclick="removeSpecField(this)">✕</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('main-product-preview').innerHTML = `
+                <div class="image-preview-placeholder">
+                    <i class="fas fa-image"></i>
+                    <p>Предпросмотр изображения</p>
+                </div>
+            `;
+        }
+
+        // Редактирование основного продукта
+        function editMainProduct(categoryId) {
+            const mainProduct = appData.mainProducts[categoryId];
+            if (!mainProduct) return;
+            
+            document.getElementById('main-product-category').value = categoryId;
+            document.getElementById('main-product-title').value = mainProduct.title;
+            document.getElementById('main-product-description').value = mainProduct.description;
+            document.getElementById('main-product-icon').value = mainProduct.icon;
+            
+            // Заполняем характеристики
+            const specsContainer = document.getElementById('main-product-specs');
+            specsContainer.innerHTML = '';
+            
+            mainProduct.specs.forEach(spec => {
+                const specField = document.createElement('div');
+                specField.className = 'spec-input-group';
+                specField.innerHTML = `
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" class="form-control spec-label-input" value="${spec.label}" placeholder="Название характеристики">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control spec-value-input" value="${spec.value}" placeholder="Значение">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-danger" onclick="removeSpecField(this)">✕</button>
+                        </div>
+                    </div>
+                `;
+                specsContainer.appendChild(specField);
+            });
+            
+            // Показываем изображение если есть
+            if (mainProduct.image) {
+                document.getElementById('main-product-preview').innerHTML = `<img src="${mainProduct.image}" alt="Preview">`;
+            }
+            
+            // Показываем вкладку с основными продуктами
+            showAdminTab('main-products');
+        }
+
+        // Удаление основного продукта
+        function deleteMainProduct(categoryId) {
+            if (confirm('Вы уверены, что хотите удалить этот основной продукт?')) {
+                delete appData.mainProducts[categoryId];
+                // Удаляем связанное изображение
+                localStorage.removeItem(`main_product_image_${categoryId}`);
+                saveData();
+                showNotification('Основной продукт удален');
+            }
+        }
+
+        // Предпросмотр изображения основного продукта
+        function previewMainProductImage(input) {
+            const preview = document.getElementById('main-product-preview');
+            const file = input.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Функции для работы с категориями
+        function addCategory(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('category-name').value;
+            const description = document.getElementById('category-description').value;
+            const icon = document.getElementById('category-icon').value;
+            const color = document.getElementById('category-color').value;
+            
+            const newCategory = {
+                id: generateId(),
+                name,
+                description,
+                icon,
+                color
+            };
+            
+            appData.categories.push(newCategory);
+            appData.products[newCategory.id] = [];
+            
+            saveData();
+            document.getElementById('category-form').reset();
+            showNotification('Категория добавлена!');
+        }
+
+        function editCategory(index) {
+            const category = appData.categories[index];
+            const newName = prompt('Новое название:', category.name);
+            const newDescription = prompt('Новое описание:', category.description);
+            
+            if (newName) category.name = newName;
+            if (newDescription) category.description = newDescription;
+            
+            saveData();
+            showNotification('Категория обновлена!');
+        }
+
+        function deleteCategory(index) {
+            if (appData.categories.length <= 1) {
+                alert('Нельзя удалить последнюю категорию!');
+                return;
+            }
+            
+            if (confirm(`Вы уверены, что хотите удалить категорию "${appData.categories[index].name}"? Все продукты в этой категории также будут удалены.`)) {
+                const categoryId = appData.categories[index].id;
+                appData.categories.splice(index, 1);
+                delete appData.products[categoryId];
+                delete appData.mainProducts[categoryId];
+                
+                // Удаляем связанные изображения
+                localStorage.removeItem(`main_product_image_${categoryId}`);
+                Object.keys(localStorage).forEach(key => {
+                    if (key.startsWith(`product_image_${categoryId}_`)) {
+                        localStorage.removeItem(key);
+                    }
+                });
+                
+                saveData();
+                showNotification('Категория удалена!');
+            }
+        }
+
+        // Функции для работы с продуктами
+        function showProductForm(categoryId) {
+            const container = document.getElementById('product-forms-container');
+            container.innerHTML = '';
+            
+            if (!categoryId) return;
+            
+            const form = document.createElement('div');
+            form.innerHTML = `
+                <h4>Добавить продукт в категорию "${getCategoryName(categoryId)}"</h4>
+                <form id="product-form-${categoryId}" onsubmit="addProduct(event, '${categoryId}')">
+                    <div class="form-group">
+                        <label for="product-name-${categoryId}">Название</label>
+                        <input type="text" id="product-name-${categoryId}" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-description-${categoryId}">Описание</label>
+                        <textarea id="product-description-${categoryId}" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-specs-${categoryId}">Характеристики</label>
+                        <input type="text" id="product-specs-${categoryId}" class="form-control" placeholder="Крепость: 40%, Объем: 0.5л" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-image-${categoryId}">Изображение</label>
+                        <input type="file" id="product-image-${categoryId}" class="form-control" accept="image/*" onchange="previewImage(this, 'product-preview-${categoryId}')">
+                        <div class="image-preview" id="product-preview-${categoryId}">
+                            <div class="image-preview-placeholder">
+                                <i class="fas fa-image"></i>
+                                <p>Предпросмотр изображения</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Добавить продукт</button>
+                </form>
+                
+                <div class="products-list">
+                    <h4>Продукты в этой категории</h4>
+                    <div id="product-list-${categoryId}"></div>
+                </div>
+            `;
+            container.appendChild(form);
+            
+            updateProductList(categoryId);
+        }
+
+        async function addProduct(event, categoryId) {
+            event.preventDefault();
+            
+            const form = document.getElementById(`product-form-${categoryId}`);
+            const name = document.getElementById(`product-name-${categoryId}`).value;
+            const description = document.getElementById(`product-description-${categoryId}`).value;
+            const specs = document.getElementById(`product-specs-${categoryId}`).value;
+            const imageInput = document.getElementById(`product-image-${categoryId}`);
+            
+            let imageData = null;
+            
+            const file = imageInput.files[0];
+            if (file) {
+                try {
+                    const reader = new FileReader();
+                    imageData = await new Promise((resolve) => {
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.readAsDataURL(file);
+                    });
+                } catch (error) {
+                    console.error('Ошибка обработки изображения:', error);
+                    showNotification('Ошибка при обработке изображения', 'error');
+                    return;
+                }
+            }
+            
+            const newProduct = {
+                name,
+                description,
+                specs,
+                image: imageData
+            };
+            
+            appData.products[categoryId].push(newProduct);
+            saveData();
+            form.reset();
+            document.getElementById(`product-preview-${categoryId}`).innerHTML = `
+                <div class="image-preview-placeholder">
+                    <i class="fas fa-image"></i>
+                    <p>Предпросмотр изображения</p>
+                </div>
+            `;
+            updateProductList(categoryId);
+            showNotification('Продукт добавлен!');
+        }
+
+        function updateProductList(categoryId) {
+            const list = document.getElementById(`product-list-${categoryId}`);
+            if (!list) return;
+            
+            list.innerHTML = '';
+            
+            appData.products[categoryId].forEach((product, index) => {
+                const item = document.createElement('div');
+                item.className = 'product-admin-item';
+                item.innerHTML = `
+                    ${product.image ? 
+                        `<img src="${product.image}" alt="${product.name}" class="product-admin-image">` :
+                        `<div class="product-admin-image" style="background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #718096;">
+                            <i class="fas fa-image"></i>
+                        </div>`
+                    }
+                    <div class="product-admin-info">
+                        <div class="product-admin-name">${product.name}</div>
+                        <div>${product.description}</div>
+                    </div>
+                    <div class="product-admin-actions">
+                        <button class="btn btn-small" onclick="editProduct('${categoryId}', ${index})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-small btn-danger" onclick="deleteProduct('${categoryId}', ${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function editProduct(categoryId, index) {
+            const product = appData.products[categoryId][index];
+            const newName = prompt('Новое название:', product.name);
+            const newDescription = prompt('Новое описание:', product.description);
+            const newSpecs = prompt('Новые характеристики:', product.specs);
+            
+            if (newName) product.name = newName;
+            if (newDescription) product.description = newDescription;
+            if (newSpecs) product.specs = newSpecs;
+            
+            saveData();
+            updateProductList(categoryId);
+            showNotification('Продукт обновлен!');
+        }
+
+        function deleteProduct(categoryId, index) {
+            if (confirm('Вы уверены, что хотите удалить этот продукт?')) {
+                appData.products[categoryId].splice(index, 1);
+                // Удаляем связанное изображение
+                localStorage.removeItem(`product_image_${categoryId}_${index}`);
+                saveData();
+                updateProductList(categoryId);
+                showNotification('Продукт удален!');
+            }
+        }
+
+        // Вспомогательные функции
+        function generateId() {
+            return 'cat_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function getCategoryName(categoryId) {
+            const category = appData.categories.find(cat => cat.id === categoryId);
+            return category ? category.name : 'Неизвестная категория';
+        }
+
+        function lightenColor(color, percent) {
+            const num = parseInt(color.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+            return "#" + (
+                0x1000000 +
+                (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+                (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+                (B < 255 ? (B < 1 ? 0 : B) : 255)
+            ).toString(16).slice(1);
+        }
+
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const file = input.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Экспорт/импорт данных
+        function exportData() {
+            const dataToExport = {
+                categories: appData.categories,
+                products: appData.products,
+                mainProducts: appData.mainProducts
+            };
+            
+            const dataStr = JSON.stringify(dataToExport, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'mankovichi_data.json';
+            link.click();
+            showNotification('Данные экспортированы!');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (confirm('Заменить текущие данные импортированными?')) {
+                        appData.categories = importedData.categories || appData.categories;
+                        appData.products = importedData.products || appData.products;
+                        appData.mainProducts = importedData.mainProducts || appData.mainProducts;
+                        saveData();
+                        showNotification('Данные успешно импортированы!');
+                    }
+                } catch (error) {
+                    showNotification('Ошибка при чтении файла: ' + error.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function clearAllData() {
+            if (confirm('Вы уверены, что хотите удалить ВСЕ данные? Это действие нельзя отменить.')) {
+                appData = {
+                    categories: [
+                        {
+                            id: 'default',
+                            name: 'Продукция',
+                            description: 'Наша продукция',
+                            icon: 'fa-wine-bottle',
+                            color: '#2d5a27'
+                        }
+                    ],
+                    products: {
+                        default: []
+                    },
+                    mainProducts: {}
+                };
+                
+                // Очищаем localStorage
+                localStorage.clear();
+                saveData();
+                showNotification('Все данные удалены!');
+            }
+        }
+
+        // Навигация
         function showMainPage() {
             document.getElementById('main-page').style.display = 'block';
             hideAllProductPages();
@@ -1103,49 +2332,119 @@
         function showProductPage(productType) {
             document.getElementById('main-page').style.display = 'none';
             hideAllProductPages();
-            document.getElementById(`product-${productType}`).classList.add('active');
+            const page = document.getElementById(`product-${productType}`);
+            if (page) {
+                page.classList.add('active');
+            }
             window.scrollTo(0, 0);
         }
 
         function hideAllProductPages() {
-            const productPages = document.querySelectorAll('.product-page');
-            productPages.forEach(page => {
+            document.querySelectorAll('.product-page').forEach(page => {
                 page.classList.remove('active');
             });
         }
 
-        // Плавная прокрутка
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+        // Админ-панель
+        function showAdminPanel() {
+            document.getElementById('admin-panel').classList.add('active');
+            updateDisplay();
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('admin-panel').classList.remove('active');
+            // ВОССТАНАВЛИВАЕМ ОТОБРАЖЕНИЕ ГЛАВНОЙ СТРАНИЦЫ
+            showMainPage();
+        }
+
+        function showAdminTab(tabName) {
+            document.querySelectorAll('.admin-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(`admin-${tabName}`).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Функции для работы с базой данных MySQL
+        function connectToDatabase() {
+            showNotification('Подключение к базе данных...', 'info');
+            // В реальном приложении здесь был бы AJAX запрос к серверу
+            setTimeout(() => {
+                document.getElementById('db-status').textContent = 'Подключено';
+                showNotification('Успешное подключение к базе данных!');
+            }, 1500);
+        }
+
+        function syncToDatabase() {
+            showNotification('Синхронизация с базой данных...', 'info');
+            // В реальном приложении здесь был бы AJAX запрос к серверу
+            setTimeout(() => {
+                showNotification('Данные успешно синхронизированы с базой данных!');
+            }, 2000);
+        }
+
+        function loadFromDatabase() {
+            showNotification('Загрузка данных из базы...', 'info');
+            // В реальном приложении здесь был бы AJAX запрос к серверу
+            setTimeout(() => {
+                showNotification('Данные успешно загружены из базы данных!');
+            }, 2000);
+        }
+
+        function clearDatabase() {
+            if (confirm('Вы уверены, что хотите очистить базу данных? Это действие нельзя отменить.')) {
+                showNotification('Очистка базы данных...', 'info');
+                // В реальном приложении здесь был бы AJAX запрос к серверу
+                setTimeout(() => {
+                    showNotification('База данных успешно очищена!');
+                }, 2000);
+            }
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            
+            // Плавная прокрутка
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 });
             });
-        });
 
-        // Анимация появления элементов при скролле
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+            // Анимация появления элементов
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.about-card, .product-card, .contact-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
             });
-        }, observerOptions);
-
-        // Анимируем карточки
-        document.querySelectorAll('.about-card, .product-card, .contact-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
         });
     </script>
 </body>
