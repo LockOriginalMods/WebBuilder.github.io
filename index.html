@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Онлайн свеча | Виртуальное зажжение</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #D4AF37;
@@ -16,91 +16,95 @@
             --burgundy: #800020;
             --dark-blue: #1A237E;
             --purple: #4A235A;
+            --wood: #8B4513;
+            --wood-light: #A0522D;
             --light: #FDF6E3;
             --dark: #2C1810;
             --transition: all 0.3s ease;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            --glow: 0 0 20px rgba(212, 175, 55, 0.5);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --glow: 0 0 20px rgba(212, 175, 55, 0.7);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background: 
-                linear-gradient(rgba(26, 35, 126, 0.8), rgba(74, 35, 90, 0.8)),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231A237E"/><path d="M0 0L100 100M100 0L0 100" stroke="%234A235A" stroke-width="1"/></svg>');
+                linear-gradient(rgba(26, 35, 126, 0.9), rgba(74, 35, 90, 0.9)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%231A237E"/><path d="M0 0L200 200M200 0L0 200" stroke="%234A235A" stroke-width="2"/><circle cx="100" cy="100" r="30" fill="%234A235A" opacity="0.3"/></svg>');
             color: var(--light);
             min-height: 100vh;
             overflow-x: hidden;
             user-select: none;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Cormorant Garamond', serif;
+            touch-action: manipulation;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 15px;
         }
 
         header {
             text-align: center;
-            padding: 40px 0;
+            padding: 30px 0 20px;
             position: relative;
+            border-bottom: 2px solid var(--gold);
+            margin-bottom: 25px;
         }
 
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 600;
-            margin-bottom: 10px;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
             color: var(--gold);
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
             position: relative;
             display: inline-block;
         }
 
         .logo::after {
-            content: '';
+            content: '✝';
             position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            top: -15px;
+            right: -25px;
+            font-size: 1.5rem;
+            color: var(--gold-light);
         }
 
         .tagline {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             opacity: 0.9;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-style: italic;
+            color: var(--gold-light);
         }
 
         .main-content {
             display: flex;
             flex-wrap: wrap;
-            gap: 40px;
+            gap: 25px;
             justify-content: center;
             align-items: flex-start;
         }
 
         .candle-section {
             flex: 1;
-            min-width: 300px;
+            min-width: 320px;
             max-width: 500px;
             background: 
-                linear-gradient(135deg, rgba(139, 0, 0, 0.7), rgba(128, 0, 32, 0.7)),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%238B0000"/><path d="M0 0L100 100M100 0L0 100" stroke="%23800020" stroke-width="1"/></svg>');
-            backdrop-filter: blur(5px);
+                linear-gradient(135deg, rgba(139, 0, 0, 0.85), rgba(128, 0, 32, 0.85)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%238B0000"/><path d="M0 0L100 100M100 0L0 100" stroke="%23800020" stroke-width="2"/></svg>');
             border-radius: 15px;
-            padding: 30px;
+            padding: 25px 20px;
             box-shadow: var(--shadow);
-            border: 1px solid var(--gold);
+            border: 2px solid var(--gold);
             position: relative;
             overflow: hidden;
         }
@@ -117,37 +121,55 @@
 
         .candle-container {
             position: relative;
-            height: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 30px;
-            border: 2px dashed rgba(212, 175, 55, 0.3);
+            height: 350px;
+            margin-bottom: 25px;
+            border: 2px dashed rgba(212, 175, 55, 0.4);
             border-radius: 10px;
             transition: var(--transition);
-            background: rgba(0, 0, 0, 0.2);
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><rect width="60" height="60" fill="%23000" opacity="0.1"/><path d="M30 10L40 30 30 50 20 30Z" fill="%23D4AF37" opacity="0.1"/></svg>');
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 20px;
         }
 
-        .candle-container.drag-over {
-            border-color: var(--gold);
-            background: rgba(212, 175, 55, 0.1);
+        .altar {
+            width: 90%;
+            height: 20px;
+            background: linear-gradient(to bottom, var(--wood-light), var(--wood));
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            margin-bottom: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .altar::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 10%;
+            right: 10%;
+            height: 10px;
+            background: linear-gradient(to bottom, var(--gold), var(--bronze));
+            border-radius: 5px 5px 0 0;
         }
 
         .candle-rack {
-            position: relative;
             width: 100%;
-            height: 100%;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            justify-content: space-around;
             align-items: flex-end;
-            gap: 20px;
-            padding: 20px;
+            padding: 0 15px;
+            position: relative;
+            z-index: 5;
         }
 
         .candle-slot {
-            width: 80px;
-            height: 100px;
+            width: 70px;
+            height: 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -156,50 +178,48 @@
         }
 
         .candle-holder {
-            width: 40px;
-            height: 20px;
+            width: 50px;
+            height: 60px;
             background: linear-gradient(to bottom, var(--bronze), var(--gold-dark));
-            border-radius: 50% 50% 0 0;
+            border-radius: 10px 10px 0 0;
             position: relative;
             z-index: 2;
-            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
         }
 
-        .candle-holder::after {
+        .candle-holder::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
+            top: -5px;
+            width: 40px;
             height: 10px;
             background: linear-gradient(to bottom, var(--gold), var(--bronze));
             border-radius: 50% 50% 0 0;
         }
 
-        .candle-slot.empty {
-            animation: pulse 2s infinite;
-        }
-
         .candle-slot.empty .candle-holder {
-            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
         }
 
         .candle {
-            position: relative;
-            width: 80px;
-            height: 300px;
-            background: linear-gradient(to right, var(--gold-dark), var(--bronze), var(--gold-dark));
-            border-radius: 10px 10px 5px 5px;
+            position: absolute;
+            width: 50px;
+            height: 180px;
+            background: linear-gradient(to right, var(--wood-light), var(--wood), var(--wood-light));
+            border-radius: 8px 8px 3px 3px;
             box-shadow: 
-                inset -5px 0 10px rgba(0, 0, 0, 0.3),
-                0 5px 15px rgba(0, 0, 0, 0.2);
-            transform: perspective(500px) rotateX(10deg);
-            transition: var(--transition);
+                inset -3px 0 8px rgba(0, 0, 0, 0.4),
+                0 5px 15px rgba(0, 0, 0, 0.3);
             cursor: grab;
             touch-action: none;
             z-index: 10;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.2s ease;
         }
 
         .candle:active {
@@ -207,38 +227,40 @@
         }
 
         .candle.dragging {
-            transform: perspective(500px) rotateX(10deg) scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: translate(-50%, -50%) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
             z-index: 100;
         }
 
         .candle.in-slot {
-            transform: none;
             cursor: default;
             position: absolute;
-            bottom: 20px;
+            bottom: 60px;
+            top: auto;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .candle::before {
             content: '';
             position: absolute;
-            top: -20px;
+            top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 30px;
-            height: 40px;
-            background: linear-gradient(to bottom, #f5f5f5, #e0e0e0);
+            width: 25px;
+            height: 30px;
+            background: linear-gradient(to bottom, #f8f8f8, #e8e8e8);
             border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         }
 
         .flame {
             position: absolute;
-            top: -60px;
+            top: -45px;
             left: 50%;
             transform: translateX(-50%);
-            width: 25px;
-            height: 80px;
+            width: 20px;
+            height: 60px;
             background: linear-gradient(to top, var(--gold-light), var(--gold), transparent);
             border-radius: 50% 50% 20% 20%;
             box-shadow: var(--glow);
@@ -253,11 +275,11 @@
 
         .smoke {
             position: absolute;
-            top: -100px;
+            top: -80px;
             left: 50%;
             transform: translateX(-50%);
-            width: 10px;
-            height: 30px;
+            width: 8px;
+            height: 25px;
             background: rgba(255, 255, 255, 0.7);
             border-radius: 50%;
             opacity: 0;
@@ -271,14 +293,14 @@
         .controls {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         .btn {
-            padding: 15px 25px;
+            padding: 14px 20px;
             border: none;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
@@ -338,16 +360,15 @@
 
         .prayer-section {
             flex: 1;
-            min-width: 300px;
+            min-width: 320px;
             max-width: 500px;
             background: 
-                linear-gradient(135deg, rgba(26, 35, 126, 0.7), rgba(74, 35, 90, 0.7)),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231A237E"/><path d="M0 0L100 100M100 0L0 100" stroke="%234A235A" stroke-width="1"/></svg>');
-            backdrop-filter: blur(5px);
+                linear-gradient(135deg, rgba(26, 35, 126, 0.85), rgba(74, 35, 90, 0.85)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231A237E"/><path d="M0 0L100 100M100 0L0 100" stroke="%234A235A" stroke-width="2"/></svg>');
             border-radius: 15px;
-            padding: 30px;
+            padding: 25px 20px;
             box-shadow: var(--shadow);
-            border: 1px solid var(--gold);
+            border: 2px solid var(--gold);
             position: relative;
             overflow: hidden;
         }
@@ -365,7 +386,7 @@
         .section-title {
             font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             color: var(--gold);
             text-align: center;
             position: relative;
@@ -386,17 +407,17 @@
 
         .prayer-input {
             width: 100%;
-            min-height: 150px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            min-height: 140px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.4);
             border-radius: 10px;
             padding: 15px;
             color: var(--light);
-            font-size: 1rem;
+            font-size: 1.1rem;
             resize: vertical;
             margin-bottom: 20px;
             transition: var(--transition);
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Cormorant Garamond', serif;
         }
 
         .prayer-input:focus {
@@ -414,14 +435,14 @@
 
         .intention-option {
             padding: 12px 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.4);
             border-radius: 8px;
             text-align: center;
             cursor: pointer;
             transition: var(--transition);
-            font-size: 0.9rem;
-            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            font-family: 'Cormorant Garamond', serif;
         }
 
         .intention-option:hover, .intention-option.active {
@@ -433,9 +454,9 @@
         .stats {
             display: flex;
             justify-content: space-around;
-            margin-top: 30px;
+            margin-top: 25px;
             padding-top: 20px;
-            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            border-top: 1px solid rgba(212, 175, 55, 0.4);
         }
 
         .stat {
@@ -443,7 +464,7 @@
         }
 
         .stat-number {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--gold);
             font-family: 'Playfair Display', serif;
@@ -456,39 +477,59 @@
 
         .drag-hint {
             position: absolute;
-            bottom: 15px;
+            top: 15px;
             left: 0;
             width: 100%;
             text-align: center;
-            font-size: 0.9rem;
-            opacity: 0.7;
+            font-size: 1rem;
+            opacity: 0.8;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            color: var(--gold-light);
         }
 
         .church-icon {
             position: absolute;
             top: 20px;
             right: 20px;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--gold);
             opacity: 0.7;
         }
 
+        .icon-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 100px;
+            border: 2px solid var(--gold);
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 2rem;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
         footer {
             text-align: center;
-            padding: 40px 0 20px;
-            margin-top: 50px;
-            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 30px 0 15px;
+            margin-top: 30px;
+            border-top: 2px solid rgba(212, 175, 55, 0.4);
             position: relative;
         }
 
         .footer-text {
             opacity: 0.7;
             font-size: 0.9rem;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .cross {
@@ -496,8 +537,10 @@
             top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: var(--gold);
+            background: var(--dark-blue);
+            padding: 0 15px;
         }
 
         .notification {
@@ -505,7 +548,7 @@
             top: 20px;
             right: 20px;
             padding: 15px 25px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 10px;
             box-shadow: var(--shadow);
@@ -516,6 +559,7 @@
             align-items: center;
             gap: 10px;
             border-left: 4px solid var(--gold);
+            max-width: 300px;
         }
 
         .notification.show {
@@ -561,32 +605,97 @@
 
         @keyframes pulse {
             0% {
-                transform: scale(1);
+                box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
             }
             50% {
-                transform: scale(1.05);
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
             }
             100% {
-                transform: scale(1);
+                box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
             }
         }
 
+        /* Мобильные стили */
         @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .candle-section, .prayer-section {
-                width: 100%;
+            .container {
+                padding: 10px;
             }
             
             .logo {
                 font-size: 2.2rem;
             }
             
+            .tagline {
+                font-size: 1.1rem;
+            }
+            
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .candle-section, .prayer-section {
+                width: 100%;
+                min-width: unset;
+                padding: 20px 15px;
+            }
+            
+            .candle-container {
+                height: 300px;
+            }
+            
+            .candle-rack {
+                padding: 0 10px;
+            }
+            
+            .candle-slot {
+                width: 60px;
+            }
+            
+            .candle {
+                width: 45px;
+                height: 160px;
+            }
+            
             .section-title {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
+            }
+            
+            .btn {
+                padding: 12px 15px;
+                font-size: 1rem;
+            }
+            
+            .stats {
+                margin-top: 20px;
+            }
+            
+            .stat-number {
+                font-size: 1.6rem;
+            }
+            
+            .notification {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: unset;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .candle-rack {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .candle-slot {
+                width: 80px;
+            }
+            
+            .intention-options {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -603,6 +712,10 @@
                 <i class="fas fa-church church-icon"></i>
                 <h2 class="section-title">Зажгите свечу</h2>
                 <div class="candle-container" id="candleContainer">
+                    <div class="icon-frame">
+                        <i class="fas cross-icon">✝</i>
+                    </div>
+                    <div class="altar"></div>
                     <div class="candle-rack" id="candleRack">
                         <!-- Слоты для свечей будут созданы через JS -->
                     </div>
@@ -612,7 +725,7 @@
                     </div>
                     <div class="drag-hint">
                         <i class="fas fa-arrows-alt"></i>
-                        Перетащите свечу на свободное место
+                        Перетащите свечу на свободный подсвечник
                     </div>
                 </div>
                 <div class="controls">
@@ -642,7 +755,7 @@
             </section>
 
             <section class="prayer-section">
-                <i class="fas fa-pray church-icon"></i>
+                <i class="fas fa-praying-hands church-icon"></i>
                 <h2 class="section-title">Ваше пожелание или молитва</h2>
                 <textarea class="prayer-input" placeholder="Напишите здесь ваше пожелание, молитву или мысль..."></textarea>
                 
@@ -693,7 +806,7 @@
             // Создаем слоты для свечей
             function createCandleSlots() {
                 candleRack.innerHTML = '';
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < 4; i++) {
                     const slot = document.createElement('div');
                     slot.className = 'candle-slot empty';
                     slot.innerHTML = '<div class="candle-holder"></div>';
@@ -706,60 +819,67 @@
             
             // Перетаскивание свечи
             let isDragging = false;
-            let currentX, currentY, initialX, initialY;
-            let xOffset = 0, yOffset = 0;
+            let startX, startY, offsetX = 0, offsetY = 0;
             let candleInSlot = false;
             let currentSlot = null;
             
-            // Инициализация счетчиков из localStorage или случайных значений
+            // Инициализация счетчиков
             let todayCount = localStorage.getItem('candlesToday') || Math.floor(Math.random() * 2000) + 1000;
             let totalCount = localStorage.getItem('candlesTotal') || Math.floor(Math.random() * 80000) + 80000;
             
             candlesLitToday.textContent = formatNumber(todayCount);
             totalCandles.textContent = formatNumber(totalCount);
             
-            // Улучшенная система перетаскивания для мобильных устройств
+            // Улучшенная система перетаскивания для всех устройств
             function startDrag(e) {
                 if (candleInSlot) return;
                 
-                // Получаем координаты касания/клика
-                const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-                const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+                isDragging = true;
+                candle.classList.add('dragging');
                 
-                initialX = clientX - xOffset;
-                initialY = clientY - yOffset;
-                
-                if (e.target === candle || candle.contains(e.target)) {
-                    isDragging = true;
-                    candle.classList.add('dragging');
-                    
-                    // Предотвращаем скроллинг страницы на мобильных устройствах
-                    if (e.type.includes('touch')) {
-                        e.preventDefault();
-                    }
+                // Получаем координаты начала перетаскивания
+                const rect = candle.getBoundingClientRect();
+                if (e.type.includes('touch')) {
+                    startX = e.touches[0].clientX - rect.left;
+                    startY = e.touches[0].clientY - rect.top;
+                } else {
+                    startX = e.clientX - rect.left;
+                    startY = e.clientY - rect.top;
                 }
+                
+                // Предотвращаем стандартное поведение
+                e.preventDefault();
             }
             
             function duringDrag(e) {
-                if (isDragging) {
-                    // Предотвращаем стандартное поведение
-                    e.preventDefault();
-                    
-                    // Получаем координаты касания/клика
-                    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-                    
-                    currentX = clientX - initialX;
-                    currentY = clientY - initialY;
-                    
-                    xOffset = currentX;
-                    yOffset = currentY;
-                    
-                    setTranslate(currentX, currentY, candle);
-                    
-                    // Проверяем, находится ли свеча над слотом
-                    checkCandleOverSlot();
+                if (!isDragging) return;
+                
+                e.preventDefault();
+                
+                let clientX, clientY;
+                if (e.type.includes('touch')) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
                 }
+                
+                // Вычисляем новые координаты
+                const containerRect = candleContainer.getBoundingClientRect();
+                let newX = clientX - containerRect.left - startX;
+                let newY = clientY - containerRect.top - startY;
+                
+                // Ограничиваем перемещение в пределах контейнера
+                newX = Math.max(0, Math.min(newX, containerRect.width - candle.offsetWidth));
+                newY = Math.max(0, Math.min(newY, containerRect.height - candle.offsetHeight));
+                
+                // Применяем новые координаты
+                candle.style.left = newX + 'px';
+                candle.style.top = newY + 'px';
+                
+                // Проверяем, находится ли свеча над слотом
+                checkCandleOverSlot();
             }
             
             function endDrag() {
@@ -774,19 +894,14 @@
                 }
             }
             
-            // События для перетаскивания на десктопе
+            // События для перетаскивания
             candle.addEventListener("mousedown", startDrag);
             document.addEventListener("mousemove", duringDrag);
             document.addEventListener("mouseup", endDrag);
             
-            // События для перетаскивания на мобильных устройствах
             candle.addEventListener("touchstart", startDrag, { passive: false });
             document.addEventListener("touchmove", duringDrag, { passive: false });
             document.addEventListener("touchend", endDrag);
-            
-            function setTranslate(xPos, yPos, el) {
-                el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0) perspective(500px) rotateX(10deg) scale(1.05)`;
-            }
             
             function checkCandleOverSlot() {
                 const candleRect = candle.getBoundingClientRect();
@@ -805,7 +920,7 @@
                         candleRect.bottom > slotRect.top
                     ) {
                         currentSlot = slot;
-                        slot.style.background = 'rgba(212, 175, 55, 0.1)';
+                        slot.style.background = 'rgba(212, 175, 55, 0.2)';
                     } else {
                         slot.style.background = '';
                     }
@@ -816,8 +931,7 @@
                 candleInSlot = true;
                 currentSlot = slot;
                 
-                // Сбрасываем трансформацию
-                candle.style.transform = 'none';
+                // Сбрасываем позиционирование
                 candle.classList.add('in-slot');
                 
                 // Позиционируем свечу в слоте
@@ -825,7 +939,7 @@
                 const containerRect = candleContainer.getBoundingClientRect();
                 
                 const x = slotRect.left - containerRect.left + (slotRect.width - candle.offsetWidth) / 2;
-                const y = slotRect.top - containerRect.top + (slotRect.height - candle.offsetHeight) / 2;
+                const y = slotRect.top - containerRect.top;
                 
                 candle.style.left = `${x}px`;
                 candle.style.top = `${y}px`;
@@ -837,7 +951,7 @@
                 lightBtn.disabled = false;
                 extinguishBtn.disabled = false;
                 
-                showNotification('Свеча установлена на подсвечник.');
+                showNotification('Свеча установлена на подсвечник. Теперь вы можете зажечь её.');
             }
             
             function resetCandle() {
@@ -845,10 +959,10 @@
                 currentSlot = null;
                 
                 // Сбрасываем позиционирование
-                candle.style.left = 'auto';
-                candle.style.top = 'auto';
-                candle.style.transform = 'perspective(500px) rotateX(10deg)';
                 candle.classList.remove('in-slot', 'lit');
+                candle.style.left = '50%';
+                candle.style.top = '50%';
+                candle.style.transform = 'translate(-50%, -50%)';
                 
                 // Деактивируем кнопки
                 lightBtn.disabled = true;
