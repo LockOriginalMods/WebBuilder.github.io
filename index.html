@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Онлайн свеча | Виртуальное зажжение</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4D03F;
+            --gold-dark: #B8860B;
+            --bronze: #CD7F32;
+            --dark-red: #8B0000;
+            --burgundy: #800020;
+            --dark-blue: #1A237E;
+            --purple: #4A235A;
+            --light: #FDF6E3;
+            --dark: #2C1810;
+            --transition: all 0.3s ease;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --glow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: 
+                linear-gradient(rgba(26, 35, 126, 0.8), rgba(74, 35, 90, 0.8)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231A237E"/><path d="M0 0L100 100M100 0L0 100" stroke="%234A235A" stroke-width="1"/></svg>');
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .candle-section {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            background: 
+                linear-gradient(135deg, rgba(139, 0, 0, 0.7), rgba(128, 0, 32, 0.7)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%238B0000"/><path d="M0 0L100 100M100 0L0 100" stroke="%23800020" stroke-width="1"/></svg>');
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .candle-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+
+        .candle-container {
+            position: relative;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            border: 2px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            transition: var(--transition);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .candle-container.drag-over {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .candle-rack {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .candle-slot {
+            width: 80px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+        }
+
+        .candle-holder {
+            width: 40px;
+            height: 20px;
+            background: linear-gradient(to bottom, var(--bronze), var(--gold-dark));
+            border-radius: 50% 50% 0 0;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .candle-holder::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 10px;
+            background: linear-gradient(to bottom, var(--gold), var(--bronze));
+            border-radius: 50% 50% 0 0;
+        }
+
+        .candle-slot.empty {
+            animation: pulse 2s infinite;
+        }
+
+        .candle-slot.empty .candle-holder {
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .candle {
+            position: relative;
+            width: 80px;
+            height: 300px;
+            background: linear-gradient(to right, var(--gold-dark), var(--bronze), var(--gold-dark));
+            border-radius: 10px 10px 5px 5px;
+            box-shadow: 
+                inset -5px 0 10px rgba(0, 0, 0, 0.3),
+                0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: perspective(500px) rotateX(10deg);
+            transition: var(--transition);
+            cursor: grab;
+            touch-action: none;
+            z-index: 10;
+        }
+
+        .candle:active {
+            cursor: grabbing;
+        }
+
+        .candle.dragging {
+            transform: perspective(500px) rotateX(10deg) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .candle.in-slot {
+            transform: none;
+            cursor: default;
+            position: absolute;
+            bottom: 20px;
+        }
+
+        .candle::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 40px;
+            background: linear-gradient(to bottom, #f5f5f5, #e0e0e0);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .flame {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 80px;
+            background: linear-gradient(to top, var(--gold-light), var(--gold), transparent);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: var(--glow);
+            opacity: 0;
+            transition: var(--transition);
+            animation: flicker 3s infinite alternate;
+        }
+
+        .candle.lit .flame {
+            opacity: 1;
+        }
+
+        .smoke {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .candle.lit .smoke {
+            animation: smoke 4s linear infinite;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Playfair Display', serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--dark);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            border: 1px solid var(--gold-light);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--dark-red), var(--burgundy));
+            color: var(--light);
+            border: 1px solid var(--gold);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, var(--burgundy), var(--dark-red));
+            transform: translateY(-2px);
+        }
+
+        .prayer-section {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            background: 
+                linear-gradient(135deg, rgba(26, 35, 126, 0.7), rgba(74, 35, 90, 0.7)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231A237E"/><path d="M0 0L100 100M100 0L0 100" stroke="%234A235A" stroke-width="1"/></svg>');
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prayer-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--gold);
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .prayer-input {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            color: var(--light);
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .prayer-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+        }
+
+        .intention-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .intention-option {
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .intention-option:hover, .intention-option.active {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .drag-hint {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .church-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--gold);
+            opacity: 0.7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            position: relative;
+        }
+
+        .footer-text {
+            opacity: 0.7;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .cross {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--gold);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @keyframes flicker {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0.9;
+            }
+            25% {
+                transform: translateX(-52%) scale(1.05);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(-48%) scale(0.95);
+                opacity: 0.8;
+            }
+            75% {
+                transform: translateX(-51%) scale(1.02);
+                opacity: 0.95;
+            }
+        }
+
+        @keyframes smoke {
+            0% {
+                transform: translateX(-50%) translateY(0) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateX(-50%) translateY(-50px) scale(1.5);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(-50%) translateY(-100px) scale(2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .candle-section, .prayer-section {
+                width: 100%;
+            }
+            
+            .logo {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">Онлайн Свеча</h1>
+            <p class="tagline">Зажгите виртуальную свечу и поделитесь своим светом с миром</p>
+        </header>
+
+        <div class="main-content">
+            <section class="candle-section">
+                <i class="fas fa-church church-icon"></i>
+                <h2 class="section-title">Зажгите свечу</h2>
+                <div class="candle-container" id="candleContainer">
+                    <div class="candle-rack" id="candleRack">
+                        <!-- Слоты для свечей будут созданы через JS -->
+                    </div>
+                    <div class="candle" id="candle">
+                        <div class="flame"></div>
+                        <div class="smoke"></div>
+                    </div>
+                    <div class="drag-hint">
+                        <i class="fas fa-arrows-alt"></i>
+                        Перетащите свечу на свободное место
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="btn btn-primary" id="lightCandle" disabled>
+                        <i class="fas fa-fire"></i>
+                        Зажечь свечу
+                    </button>
+                    <button class="btn btn-secondary" id="extinguishCandle" disabled>
+                        <i class="fas fa-wind"></i>
+                        Потушить свечу
+                    </button>
+                    <button class="btn btn-secondary" id="resetCandle">
+                        <i class="fas fa-redo"></i>
+                        Взять новую свечу
+                    </button>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number" id="candlesLitToday">1,247</div>
+                        <div class="stat-label">Свечей сегодня</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="totalCandles">84,592</div>
+                        <div class="stat-label">Всего свечей</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="prayer-section">
+                <i class="fas fa-pray church-icon"></i>
+                <h2 class="section-title">Ваше пожелание или молитва</h2>
+                <textarea class="prayer-input" placeholder="Напишите здесь ваше пожелание, молитву или мысль..."></textarea>
+                
+                <h3 class="section-title" style="font-size: 1.4rem;">Выберите намерение</h3>
+                <div class="intention-options">
+                    <div class="intention-option">Здоровье</div>
+                    <div class="intention-option">Любовь</div>
+                    <div class="intention-option">Семья</div>
+                    <div class="intention-option">Мир</div>
+                    <div class="intention-option">Благодарность</div>
+                    <div class="intention-option">Память</div>
+                </div>
+                
+                <button class="btn btn-primary" id="savePrayer">
+                    <i class="fas fa-pray"></i>
+                    Сохранить пожелание
+                </button>
+            </section>
+        </div>
+
+        <footer>
+            <div class="cross">✝</div>
+            <p class="footer-text">© 2025 Онлайн Свеча. Все права защищены.</p>
+            <p class="footer-text">Это виртуальное пространство для размышлений и молитв.</p>
+        </footer>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">Свеча зажжена успешно!</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const candle = document.getElementById('candle');
+            const candleContainer = document.getElementById('candleContainer');
+            const candleRack = document.getElementById('candleRack');
+            const lightBtn = document.getElementById('lightCandle');
+            const extinguishBtn = document.getElementById('extinguishCandle');
+            const resetBtn = document.getElementById('resetCandle');
+            const savePrayerBtn = document.getElementById('savePrayer');
+            const intentionOptions = document.querySelectorAll('.intention-option');
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const candlesLitToday = document.getElementById('candlesLitToday');
+            const totalCandles = document.getElementById('totalCandles');
+            
+            // Создаем слоты для свечей
+            function createCandleSlots() {
+                candleRack.innerHTML = '';
+                for (let i = 0; i < 6; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'candle-slot empty';
+                    slot.innerHTML = '<div class="candle-holder"></div>';
+                    slot.dataset.index = i;
+                    candleRack.appendChild(slot);
+                }
+            }
+            
+            createCandleSlots();
+            
+            // Перетаскивание свечи
+            let isDragging = false;
+            let currentX, currentY, initialX, initialY;
+            let xOffset = 0, yOffset = 0;
+            let candleInSlot = false;
+            let currentSlot = null;
+            
+            // Инициализация счетчиков из localStorage или случайных значений
+            let todayCount = localStorage.getItem('candlesToday') || Math.floor(Math.random() * 2000) + 1000;
+            let totalCount = localStorage.getItem('candlesTotal') || Math.floor(Math.random() * 80000) + 80000;
+            
+            candlesLitToday.textContent = formatNumber(todayCount);
+            totalCandles.textContent = formatNumber(totalCount);
+            
+            // Улучшенная система перетаскивания для мобильных устройств
+            function startDrag(e) {
+                if (candleInSlot) return;
+                
+                // Получаем координаты касания/клика
+                const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+                
+                initialX = clientX - xOffset;
+                initialY = clientY - yOffset;
+                
+                if (e.target === candle || candle.contains(e.target)) {
+                    isDragging = true;
+                    candle.classList.add('dragging');
+                    
+                    // Предотвращаем скроллинг страницы на мобильных устройствах
+                    if (e.type.includes('touch')) {
+                        e.preventDefault();
+                    }
+                }
+            }
+            
+            function duringDrag(e) {
+                if (isDragging) {
+                    // Предотвращаем стандартное поведение
+                    e.preventDefault();
+                    
+                    // Получаем координаты касания/клика
+                    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+                    
+                    currentX = clientX - initialX;
+                    currentY = clientY - initialY;
+                    
+                    xOffset = currentX;
+                    yOffset = currentY;
+                    
+                    setTranslate(currentX, currentY, candle);
+                    
+                    // Проверяем, находится ли свеча над слотом
+                    checkCandleOverSlot();
+                }
+            }
+            
+            function endDrag() {
+                if (!isDragging) return;
+                
+                isDragging = false;
+                candle.classList.remove('dragging');
+                
+                // Если свеча над слотом, помещаем ее в слот
+                if (currentSlot) {
+                    placeCandleInSlot(currentSlot);
+                }
+            }
+            
+            // События для перетаскивания на десктопе
+            candle.addEventListener("mousedown", startDrag);
+            document.addEventListener("mousemove", duringDrag);
+            document.addEventListener("mouseup", endDrag);
+            
+            // События для перетаскивания на мобильных устройствах
+            candle.addEventListener("touchstart", startDrag, { passive: false });
+            document.addEventListener("touchmove", duringDrag, { passive: false });
+            document.addEventListener("touchend", endDrag);
+            
+            function setTranslate(xPos, yPos, el) {
+                el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0) perspective(500px) rotateX(10deg) scale(1.05)`;
+            }
+            
+            function checkCandleOverSlot() {
+                const candleRect = candle.getBoundingClientRect();
+                const slots = document.querySelectorAll('.candle-slot.empty');
+                
+                currentSlot = null;
+                
+                slots.forEach(slot => {
+                    const slotRect = slot.getBoundingClientRect();
+                    
+                    // Проверяем пересечение свечи и слота
+                    if (
+                        candleRect.left < slotRect.right &&
+                        candleRect.right > slotRect.left &&
+                        candleRect.top < slotRect.bottom &&
+                        candleRect.bottom > slotRect.top
+                    ) {
+                        currentSlot = slot;
+                        slot.style.background = 'rgba(212, 175, 55, 0.1)';
+                    } else {
+                        slot.style.background = '';
+                    }
+                });
+            }
+            
+            function placeCandleInSlot(slot) {
+                candleInSlot = true;
+                currentSlot = slot;
+                
+                // Сбрасываем трансформацию
+                candle.style.transform = 'none';
+                candle.classList.add('in-slot');
+                
+                // Позиционируем свечу в слоте
+                const slotRect = slot.getBoundingClientRect();
+                const containerRect = candleContainer.getBoundingClientRect();
+                
+                const x = slotRect.left - containerRect.left + (slotRect.width - candle.offsetWidth) / 2;
+                const y = slotRect.top - containerRect.top + (slotRect.height - candle.offsetHeight) / 2;
+                
+                candle.style.left = `${x}px`;
+                candle.style.top = `${y}px`;
+                
+                // Убираем класс empty у слота
+                slot.classList.remove('empty');
+                
+                // Активируем кнопки
+                lightBtn.disabled = false;
+                extinguishBtn.disabled = false;
+                
+                showNotification('Свеча установлена на подсвечник.');
+            }
+            
+            function resetCandle() {
+                candleInSlot = false;
+                currentSlot = null;
+                
+                // Сбрасываем позиционирование
+                candle.style.left = 'auto';
+                candle.style.top = 'auto';
+                candle.style.transform = 'perspective(500px) rotateX(10deg)';
+                candle.classList.remove('in-slot', 'lit');
+                
+                // Деактивируем кнопки
+                lightBtn.disabled = true;
+                extinguishBtn.disabled = true;
+                
+                // Восстанавливаем слот
+                if (currentSlot) {
+                    currentSlot.classList.add('empty');
+                    currentSlot = null;
+                }
+                
+                createCandleSlots();
+            }
+            
+            // Зажечь свечу
+            lightBtn.addEventListener('click', function() {
+                if (!candleInSlot) return;
+                
+                candle.classList.add('lit');
+                showNotification('Свеча зажжена успешно! Ваша молитва услышана.');
+                
+                // Обновляем счетчики
+                todayCount = parseInt(todayCount) + 1;
+                totalCount = parseInt(totalCount) + 1;
+                
+                candlesLitToday.textContent = formatNumber(todayCount);
+                totalCandles.textContent = formatNumber(totalCount);
+                
+                // Сохраняем в localStorage
+                localStorage.setItem('candlesToday', todayCount);
+                localStorage.setItem('candlesTotal', totalCount);
+            });
+            
+            // Потушить свечу
+            extinguishBtn.addEventListener('click', function() {
+                candle.classList.remove('lit');
+                showNotification('Свеча погашена.');
+            });
+            
+            // Сбросить свечу
+            resetBtn.addEventListener('click', resetCandle);
+            
+            // Выбор намерения
+            intentionOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    intentionOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Сохранить пожелание
+            savePrayerBtn.addEventListener('click', function() {
+                const prayerText = document.querySelector('.prayer-input').value;
+                if (prayerText.trim() === '') {
+                    showNotification('Пожалуйста, напишите ваше пожелание.');
+                    return;
+                }
+                
+                showNotification('Ваше пожелание сохранено. Да услышит Господь ваши молитвы.');
+                document.querySelector('.prayer-input').value = '';
+                
+                // Сбрасываем выбор намерения
+                intentionOptions.forEach(opt => opt.classList.remove('active'));
+            });
+            
+            // Функция показа уведомления
+            function showNotification(text) {
+                notificationText.textContent = text;
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Форматирование чисел с разделителями
+            function formatNumber(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+        });
+    </script>
+</body>
+</html>
